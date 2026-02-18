@@ -36,8 +36,14 @@ import ChangePassword from './settings/ChangePassword';
 import LibraryDashboard from './library/LibraryDashboard';
 import Timetable from './timetable/Timetable';
 import EventCalendar from './events/EventCalendar';
+import HostelDashboard from './hostel/HostelDashboard';
+import TransportDashboard from './transport/TransportDashboard';
+import AuditLogViewer from './audit/AuditLogViewer';
+import IdCardGenerator from './idcard/IdCardGenerator';
 import ApplyLeave from './leaves/ApplyLeave';
 import LeaveStatus from './leaves/LeaveStatus';
+import AcademicYearSettings from './settings/AcademicYearSettings';
+import BackupManager from './settings/BackupManager';
 // import LeaveManagement from './leaves/LeaveManagement'; // Replaced by submenus
 // Notifications import removed as we are replacing it
 // import Notifications from './notifications/Notifications';
@@ -103,6 +109,8 @@ function App() {
                 <Route path="/leaves/status" element={<LeaveStatus />} />
 
                 <Route path="/settings/change-password" element={<ChangePassword />} />
+                <Route path="/settings/academic-years" element={<AcademicYearSettings />} />
+                <Route path="/settings/backups" element={<BackupManager />} />
 
                 {/* <Route path="/leaves" element={<LeaveManagement />} /> */}
                 {/* Roles & Permissions route temporarily disabled */}
@@ -111,6 +119,10 @@ function App() {
                 {/* <Route path="/settings" element={<Settings />} /> */}
                 <Route path="/timetable" element={<Timetable />} />
                 <Route path="/events" element={<EventCalendar />} />
+                <Route path="/hostel" element={<HostelDashboard />} />
+                <Route path="/transport" element={<TransportDashboard />} />
+                <Route path="/audit-logs" element={<AuditLogViewer />} />
+                <Route path="/id-cards" element={<IdCardGenerator />} />
             </Route>
         </Routes>
     );

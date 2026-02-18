@@ -93,5 +93,31 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/events', [\App\Http\Controllers\Api\EventController::class, 'index']);
     Route::post('/events', [\App\Http\Controllers\Api\EventController::class, 'store']);
     Route::delete('/events/{event}', [\App\Http\Controllers\Api\EventController::class, 'destroy']);
+
+    // Hostel Management
+    Route::get('/hostels', [\App\Http\Controllers\Api\HostelController::class, 'index']);
+    Route::post('/hostels', [\App\Http\Controllers\Api\HostelController::class, 'store']);
+    Route::get('/hostels/{hostel}/rooms', [\App\Http\Controllers\Api\HostelController::class, 'getRooms']);
+    Route::post('/hostels/{hostel}/rooms', [\App\Http\Controllers\Api\HostelController::class, 'addRoom']);
+    Route::post('/hostels/allocate', [\App\Http\Controllers\Api\HostelController::class, 'allocateRoom']);
+
+    // Transport Management
+    Route::get('/transport/routes', [\App\Http\Controllers\Api\TransportController::class, 'index']);
+    Route::post('/transport/routes', [\App\Http\Controllers\Api\TransportController::class, 'store']);
+    Route::get('/transport/vehicles', [\App\Http\Controllers\Api\TransportController::class, 'getVehicles']);
+    Route::post('/transport/vehicles', [\App\Http\Controllers\Api\TransportController::class, 'storeVehicle']);
+    Route::post('/transport/allocate', [\App\Http\Controllers\Api\TransportController::class, 'allocate']);
+
+    // Audit Logs
+    Route::get('/audit-logs', [\App\Http\Controllers\Api\AuditController::class, 'index']);
+
+    // Academic Year
+    Route::apiResource('academic-years', \App\Http\Controllers\Api\AcademicYearController::class);
+
+    // Backup
+    Route::get('/backups', [\App\Http\Controllers\Api\BackupController::class, 'index']);
+    Route::post('/backups', [\App\Http\Controllers\Api\BackupController::class, 'create']);
+    Route::get('/backups/{filename}', [\App\Http\Controllers\Api\BackupController::class, 'download']);
+    Route::delete('/backups/{filename}', [\App\Http\Controllers\Api\BackupController::class, 'delete']);
 });
 
