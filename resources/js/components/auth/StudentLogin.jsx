@@ -13,12 +13,12 @@ export default function StudentLogin() {
         setError('');
 
         try {
-            const response = await axios.post('/api/login', { 
-                email, 
+            const response = await axios.post('/api/login', {
+                email,
                 password,
                 role: 'student' // Specify role for validation
             });
-            
+
             // Check if user is actually a student
             if (response.data.user.role !== 'student') {
                 setError('This login is only for students. Please use the correct login page.');
@@ -27,6 +27,7 @@ export default function StudentLogin() {
 
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
+            window.dispatchEvent(new Event('auth-change'));
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');

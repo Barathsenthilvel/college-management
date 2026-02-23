@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import GlobalLoader from './GlobalLoader';
 import Layout from './Layout';
@@ -59,9 +59,25 @@ import BackupManager from './settings/BackupManager';
 // import Settings from './settings/Settings';
 
 function App() {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const [token, setToken] = useState(localStorage.getItem('token'));
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{}'));
     const userRole = user?.role;
+
+    // Listen for auth changes (e.g. logout from Layout)
+    useEffect(() => {
+        const handleAuthChange = () => {
+            setToken(localStorage.getItem('token'));
+            setUser(JSON.parse(localStorage.getItem('user') || '{}'));
+        };
+
+        window.addEventListener('auth-change', handleAuthChange);
+        window.addEventListener('storage', handleAuthChange);
+
+        return () => {
+            window.removeEventListener('auth-change', handleAuthChange);
+            window.removeEventListener('storage', handleAuthChange);
+        };
+    }, []);
 
     // Check if user is admin or staff
     const canRegister = userRole === 'admin' || userRole === 'staff';

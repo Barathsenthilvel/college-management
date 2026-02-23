@@ -21,9 +21,23 @@ export default function AddStudent() {
     const [startYear, setStartYear] = useState(new Date().getFullYear());
     const [courseDuration, setCourseDuration] = useState(4); // default 4 years for engineering
     const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const isStaff = user?.role === 'staff';
 
     useEffect(() => {
-        fetchDepartments();
+        if (isStaff && user.department_id) {
+            // Staff: auto-set their department
+            setFormData(prev => ({ ...prev, department_id: user.department_id }));
+            // Fetch only their department for display
+            const token = localStorage.getItem('token');
+            axios.get(`/api/departments/${user.department_id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            }).then(res => {
+                setDepartments([res.data]);
+            }).catch(err => console.error('Failed to fetch department:', err));
+        } else {
+            fetchDepartments();
+        }
     }, []);
 
     // Calculate batch whenever start year or duration changes
@@ -129,7 +143,8 @@ export default function AddStudent() {
                         <select
                             name="department_id"
                             required
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
+                            disabled={isStaff}
+                            className={`mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors ${isStaff ? 'bg-gray-100 cursor-not-allowed' : 'bg-gray-50/50 hover:bg-white'}`}
                             value={formData.department_id}
                             onChange={handleChange}
                         >
@@ -140,6 +155,9 @@ export default function AddStudent() {
                                 </option>
                             ))}
                         </select>
+                        {isStaff && (
+                            <p className="mt-1 text-xs text-indigo-600 font-medium">Auto-assigned to your department</p>
+                        )}
                     </div>
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-1">Year</label>

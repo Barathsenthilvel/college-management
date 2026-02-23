@@ -13,12 +13,12 @@ export default function AdminLogin() {
         setError('');
 
         try {
-            const response = await axios.post('/api/login', { 
-                email, 
+            const response = await axios.post('/api/login', {
+                email,
                 password,
                 role: 'admin' // Specify role for validation
             });
-            
+
             // Check if user is actually an admin
             if (response.data.user.role !== 'admin') {
                 setError('This login is only for administrators. Please use the correct login page.');
@@ -27,6 +27,7 @@ export default function AdminLogin() {
 
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
+            window.dispatchEvent(new Event('auth-change'));
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');

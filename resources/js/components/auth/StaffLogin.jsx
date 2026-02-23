@@ -13,12 +13,12 @@ export default function StaffLogin() {
         setError('');
 
         try {
-            const response = await axios.post('/api/login', { 
-                email, 
+            const response = await axios.post('/api/login', {
+                email,
                 password,
                 role: 'staff' // Specify role for validation
             });
-            
+
             // Check if user is actually staff
             if (response.data.user.role !== 'staff') {
                 setError('This login is only for staff members. Please use the correct login page.');
@@ -27,6 +27,7 @@ export default function StaffLogin() {
 
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
+            window.dispatchEvent(new Event('auth-change'));
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
