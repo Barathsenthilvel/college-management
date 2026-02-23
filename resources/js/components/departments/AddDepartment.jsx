@@ -34,20 +34,20 @@ export default function AddDepartment() {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-4">Add Department</h1>
-            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-6">Add Department</h1>
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                 {error && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                         {error}
                     </div>
                 )}
                 {/* Department Name */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Department Name</label>
+                <div className="mb-5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Department Name</label>
                     <input
                         type="text"
                         required
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="e.g. Computer Science"
@@ -55,12 +55,12 @@ export default function AddDepartment() {
                 </div>
 
                 {/* Department Code */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Department Code</label>
+                <div className="mb-5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Department Code</label>
                     <input
                         type="text"
                         required
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                         value={code}
                         onChange={(e) => setCode(e.target.value.toUpperCase())}
                         placeholder="e.g. CSE, ECE"
@@ -68,12 +68,12 @@ export default function AddDepartment() {
                 </div>
 
                 {/* Description (optional) */}
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                        Description <span className="text-gray-400 text-xs">(optional)</span>
+                <div className="mb-5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">
+                        Description <span className="text-gray-400 font-normal text-xs">(optional)</span>
                     </label>
                     <textarea
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                         rows="3"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -82,10 +82,10 @@ export default function AddDepartment() {
                 </div>
 
                 {/* Status */}
-                <div className="mb-6">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">Status</label>
+                <div className="mb-8">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
                     <select
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                     >
@@ -96,9 +96,9 @@ export default function AddDepartment() {
                 <div className="flex space-x-4">
                     <button
                         type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-sm transition-all duration-200"
                     >
-                        Save
+                        Save Department
                     </button>
                     <button
                         type="reset"
@@ -109,7 +109,7 @@ export default function AddDepartment() {
                             setStatus('active');
                             setError('');
                         }}
-                        className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-2.5 px-6 rounded-lg shadow-sm transition-all duration-200"
                     >
                         Reset
                     </button>

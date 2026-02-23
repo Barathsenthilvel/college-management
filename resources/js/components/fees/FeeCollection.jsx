@@ -97,7 +97,7 @@ export default function FeeCollection() {
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Fee Collection</h1>
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-6">Fee Collection</h1>
 
             {message.text && (
                 <div className={`p-4 rounded-lg ${message.type === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
@@ -105,14 +105,14 @@ export default function FeeCollection() {
                 </div>
             )}
 
-            <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-8">
 
                 {/* Student Selection */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Department</label>
                         <select
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={selectedDepartment}
                             onChange={(e) => setSelectedDepartment(e.target.value)}
                             required
@@ -124,9 +124,9 @@ export default function FeeCollection() {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Student</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Student</label>
                         <select
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white disabled:opacity-50 disabled:bg-gray-100"
                             value={selectedStudent}
                             onChange={(e) => setSelectedStudent(e.target.value)}
                             required
@@ -140,13 +140,13 @@ export default function FeeCollection() {
                     </div>
                 </div>
 
-                <div className="border-t border-gray-200 pt-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Fee Details</h2>
+                <div className="border-t border-gray-100 pt-8">
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">Fee Details</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Fee Type</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Fee Type</label>
                             <select
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                                 value={feeType}
                                 onChange={(e) => setFeeType(e.target.value)}
                             >
@@ -159,21 +159,21 @@ export default function FeeCollection() {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Total Amount</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Total Amount</label>
                             <input
                                 type="number"
                                 min="0"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                                 value={totalAmount}
                                 onChange={(e) => setTotalAmount(e.target.value)}
                                 required
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Due Date</label>
                             <input
                                 type="date"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                                 value={dueDate}
                                 onChange={(e) => setDueDate(e.target.value)}
                                 required
@@ -182,24 +182,24 @@ export default function FeeCollection() {
                     </div>
                 </div>
 
-                <div className="border-t border-gray-200 pt-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Details</h2>
+                <div className="border-t border-gray-100 pt-8">
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">Payment Details</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Paid Amount</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Paid Amount</label>
                             <input
                                 type="number"
                                 min="0"
                                 max={totalAmount}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                                 value={paidAmount}
                                 onChange={(e) => setPaidAmount(e.target.value)}
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Payment Mode</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Payment Mode</label>
                             <select
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white disabled:opacity-50 disabled:bg-gray-100"
                                 value={paymentMode}
                                 onChange={(e) => setPaymentMode(e.target.value)}
                                 disabled={!paidAmount || parseFloat(paidAmount) === 0}
@@ -211,10 +211,10 @@ export default function FeeCollection() {
                             </select>
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Transaction Ref (Optional)</label>
+                            <label className="block text-sm font-semibold text-gray-700 mb-1">Transaction Ref (Optional)</label>
                             <input
                                 type="text"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white disabled:opacity-50 disabled:bg-gray-100"
                                 value={transactionRef}
                                 onChange={(e) => setTransactionRef(e.target.value)}
                                 disabled={!paidAmount || parseFloat(paidAmount) === 0}
@@ -222,17 +222,17 @@ export default function FeeCollection() {
                         </div>
                     </div>
 
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg flex justify-between items-center">
-                        <span className="font-semibold text-gray-700">Balance Amount:</span>
-                        <span className={`text-xl font-bold ${balanceAmount > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                    <div className="mt-6 p-4 bg-gray-50/80 border border-gray-100 rounded-xl flex justify-between items-center shadow-sm">
+                        <span className="font-bold text-gray-700">Balance Amount:</span>
+                        <span className={`text-xl font-black ${balanceAmount > 0 ? 'text-red-600' : 'text-green-600'}`}>
                             ₹{balanceAmount.toFixed(2)}
                         </span>
                     </div>
 
-                    <div className="mt-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Remarks</label>
+                    <div className="mt-6">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Remarks</label>
                         <textarea
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             rows="2"
                             value={remarks}
                             onChange={(e) => setRemarks(e.target.value)}
@@ -240,7 +240,7 @@ export default function FeeCollection() {
                     </div>
                 </div>
 
-                <div className="flex justify-end pt-4">
+                <div className="flex justify-end pt-4 space-x-4 border-t border-gray-100">
                     <button
                         type="button"
                         onClick={() => {
@@ -249,14 +249,14 @@ export default function FeeCollection() {
                             setTransactionRef('');
                             setRemarks('');
                         }}
-                        className="mr-4 px-6 py-2 text-gray-700 font-semibold hover:bg-gray-100 rounded-lg transition-colors"
+                        className="px-6 py-2.5 text-gray-700 font-semibold bg-white border border-gray-300 hover:bg-gray-50 rounded-lg shadow-sm transition-all duration-200"
                     >
                         Reset
                     </button>
                     <button
                         type="submit"
                         disabled={loading}
-                        className="px-8 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:bg-gray-400 transition-colors"
+                        className="px-8 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg shadow-sm hover:bg-indigo-700 disabled:bg-indigo-400 transition-all duration-200"
                     >
                         {loading ? 'Processing...' : 'Collect Fee'}
                     </button>

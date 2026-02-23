@@ -46,12 +46,14 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required', // Can be email or username
             'password' => 'required',
-            'role' => 'nullable|in:admin,staff,student', // Optional role validation
+            'role' => 'nullable|in:admin,staff,student',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        $user = User::where($loginType, $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([

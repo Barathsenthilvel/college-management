@@ -78,25 +78,25 @@ export default function AttendanceReport() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Department Attendance Report</h1>
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-6">Department Attendance Report</h1>
 
             {/* Filters */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">From Date</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">From Date</label>
                         <input
                             type="date"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={fromDate}
                             onChange={(e) => setFromDate(e.target.value)}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">To Date</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">To Date</label>
                         <input
                             type="date"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={toDate}
                             onChange={(e) => setToDate(e.target.value)}
                         />
@@ -113,56 +113,56 @@ export default function AttendanceReport() {
             ) : reportData.length > 0 ? (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Summary Cards */}
-                    <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-indigo-500">
-                            <div className="text-sm text-gray-500">Total Students Tracked</div>
-                            <div className="text-2xl font-bold">{reportData.reduce((a, b) => a + b.total_students, 0)}</div>
+                    <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-indigo-500 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Students</div>
+                            <div className="text-3xl font-bold text-gray-900">{reportData.reduce((a, b) => a + b.total_students, 0)}</div>
                         </div>
-                        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-green-500">
-                            <div className="text-sm text-gray-500">Total Present</div>
-                            <div className="text-2xl font-bold">{reportData.reduce((a, b) => a + b.present, 0)}</div>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-green-500 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Present</div>
+                            <div className="text-3xl font-bold text-gray-900">{reportData.reduce((a, b) => a + b.present, 0)}</div>
                         </div>
-                        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-red-500">
-                            <div className="text-sm text-gray-500">Total Absent</div>
-                            <div className="text-2xl font-bold">{reportData.reduce((a, b) => a + b.absent, 0)}</div>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-red-500 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Absent</div>
+                            <div className="text-3xl font-bold text-gray-900">{reportData.reduce((a, b) => a + b.absent, 0)}</div>
                         </div>
-                        <div className="bg-white p-4 rounded-lg shadow border-l-4 border-yellow-500">
-                            <div className="text-sm text-gray-500">Total Late</div>
-                            <div className="text-2xl font-bold">{reportData.reduce((a, b) => a + b.late, 0)}</div>
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 border-l-4 border-l-yellow-500 relative overflow-hidden group hover:shadow-md transition-all duration-300">
+                            <div className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Total Late</div>
+                            <div className="text-3xl font-bold text-gray-900">{reportData.reduce((a, b) => a + b.late, 0)}</div>
                         </div>
                     </div>
 
                     {/* Table */}
-                    <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden">
-                        <div className="px-6 py-4 border-b border-gray-200">
-                            <h2 className="text-lg font-semibold text-gray-800">Department Wise Breakdown</h2>
+                    <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+                            <h2 className="text-lg font-bold text-gray-800">Department Wise Breakdown</h2>
                         </div>
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
+                            <table className="min-w-full divide-y divide-gray-100">
+                                <thead className="bg-gray-50/80">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                             Department
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                             Total Students
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                             Present
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                             Absent
                                         </th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                             Attendance %
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y divide-gray-200">
+                                <tbody className="bg-white divide-y divide-gray-50">
                                     {reportData.map((dept, index) => (
-                                        <tr key={index} className="hover:bg-gray-50">
+                                        <tr key={index} className="hover:bg-gray-50/50 transition-colors duration-200">
                                             <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="text-sm font-medium text-gray-900">{dept.department_name}</div>
+                                                <div className="text-sm font-bold text-gray-900">{dept.department_name}</div>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {dept.total_students}
@@ -184,13 +184,13 @@ export default function AttendanceReport() {
                     </div>
 
                     {/* Chart */}
-                    <div className="bg-white rounded-lg shadow-md p-4">
+                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-center">
                         <Bar options={chartOptions} data={chartData} />
                     </div>
                 </div>
             ) : (
-                <div className="text-center py-12 bg-white rounded-lg shadow-md">
-                    <p className="text-gray-500">No data found for the selected date range.</p>
+                <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <p className="text-gray-500 font-medium">No data found for the selected date range.</p>
                 </div>
             )}
         </div>

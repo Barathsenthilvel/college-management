@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-export default function AddStudent() {
+export default function EditStudent() {
+    const { id } = useParams();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -11,26 +12,27 @@ export default function AddStudent() {
         year: 1,
         status: 'active',
         batch: '',
-        password: '',
-        password_confirmation: '',
         photo: null,
     });
     const [departments, setDepartments] = useState([]);
     const [error, setError] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
     const [startYear, setStartYear] = useState(new Date().getFullYear());
-    const [courseDuration, setCourseDuration] = useState(4); // default 4 years for engineering
+    const [courseDuration, setCourseDuration] = useState(4);
+    const [loading, setLoading] = useState(true);
+    const [currentPhoto, setCurrentPhoto] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchDepartments();
-    }, []);
+        fetchStudentDetails();
+    }, [id]);
 
-    // Calculate batch whenever start year or duration changes
     useEffect(() => {
-        const endYear = parseInt(startYear) + parseInt(courseDuration);
-        setFormData(prev => ({ ...prev, batch: `${startYear}-${endYear}` }));
-    }, [startYear, courseDuration]);
+        if (!loading) {
+            const endYear = parseInt(startYear) + parseInt(courseDuration);
+            setFormData(prev => ({ ...prev, batch: `${startYear}-${endYear}` }));
+        }
+    }, [startYear, courseDuration, loading]);
 
     const fetchDepartments = async () => {
         try {
@@ -44,25 +46,62 @@ export default function AddStudent() {
         }
     };
 
+    const fetchStudentDetails = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`/api/students/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const student = response.data;
+
+            setFormData({
+                name: student.name || '',
+                email: student.email || '',
+                phone: student.phone || '',
+                department_id: student.department_id || '',
+                year: student.year || 1,
+                status: student.status || 'active',
+                batch: student.batch || '',
+                photo: null, // Keep null for new uploads
+            });
+
+            if (student.batch) {
+                const parts = student.batch.split('-');
+                if (parts.length === 2) {
+                    setStartYear(parseInt(parts[0]));
+                    setCourseDuration(parseInt(parts[1]) - parseInt(parts[0]));
+                }
+            }
+
+            if (student.photo) {
+                setCurrentPhoto(student.photo);
+            }
+
+        } catch (error) {
+            console.error('Failed to fetch student details:', error);
+            setError('Failed to load student details.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
         try {
-            if (formData.password && formData.password !== formData.password_confirmation) {
-                setError("Passwords do not match");
-                return;
-            }
-
             const data = new FormData();
             Object.keys(formData).forEach(key => {
+                if (key === 'photo' && formData[key] === null) return; // Don't append empty photo
                 if (formData[key] !== null && formData[key] !== '') {
                     data.append(key, formData[key]);
                 }
             });
+            // Method spoofing for PUT request with FormData
+            data.append('_method', 'PUT');
 
             const token = localStorage.getItem('token');
-            await axios.post('/api/students', data, {
+            await axios.post(`/api/students/${id}`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'
@@ -70,7 +109,7 @@ export default function AddStudent() {
             });
             navigate('/students');
         } catch (err) {
-            setError(err.response?.data?.message || 'Failed to create student');
+            setError(err.response?.data?.message || 'Failed to update student');
         }
     };
 
@@ -82,9 +121,11 @@ export default function AddStudent() {
         setFormData({ ...formData, photo: e.target.files[0] });
     };
 
+    if (loading) return <div>Loading...</div>;
+
     return (
         <div>
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-6">Add Student</h1>
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-6">Edit Student</h1>
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                 {error && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -164,7 +205,7 @@ export default function AddStudent() {
                             onChange={(e) => setStartYear(e.target.value)}
                         >
                             {[...Array(10)].map((_, i) => {
-                                const year = new Date().getFullYear() - 2 + i;
+                                const year = new Date().getFullYear() - 5 + i;
                                 return <option key={year} value={year}>{year}</option>;
                             })}
                         </select>
@@ -205,7 +246,13 @@ export default function AddStudent() {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Student Photo</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Update Photo (Optional)</label>
+                        {currentPhoto && (
+                            <div className="mb-2">
+                                <span className="text-xs text-gray-500">Current Photo:</span>
+                                <img src={`/storage/${currentPhoto}`} alt="Current" className="h-16 w-16 rounded-full object-cover border mt-1" />
+                            </div>
+                        )}
                         <input
                             type="file"
                             accept="image/*"
@@ -214,53 +261,13 @@ export default function AddStudent() {
                             onChange={handleFileChange}
                         />
                     </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="Leave blank for default 'student123'"
-                            />
-                            <button
-                                type="button"
-                                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? (
-                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                                    </svg>
-                                ) : (
-                                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                    </svg>
-                                )}
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            name="password_confirmation"
-                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
-                            value={formData.password_confirmation}
-                            onChange={handleChange}
-                            placeholder="Confirm above password if provided"
-                        />
-                    </div>
                 </div>
                 <div className="mt-8 flex space-x-4">
                     <button
                         type="submit"
                         className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-sm transition-all duration-200"
                     >
-                        Create Student
+                        Update Student
                     </button>
                     <button
                         type="button"
@@ -274,4 +281,3 @@ export default function AddStudent() {
         </div>
     );
 }
-

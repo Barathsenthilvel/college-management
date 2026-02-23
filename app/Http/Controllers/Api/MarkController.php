@@ -12,7 +12,20 @@ class MarkController extends Controller
     {
         $query = Mark::with('student.department', 'subject');
 
-        if ($request->has('student_id')) {
+        if (auth()->user()->hasRole('student')) {
+            $student = auth()->user()->student;
+            if ($student) {
+                $query->where('student_id', $student->id);
+            } else {
+                return response()->json(['data' => []]);
+            }
+        } elseif (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $query->whereHas('student', function ($q) {
+                $q->where('department_id', auth()->user()->department_id);
+            });
+        }
+
+        if ($request->has('student_id') && !auth()->user()->hasRole('student')) {
             $query->where('student_id', $request->student_id);
         }
 
@@ -31,7 +44,10 @@ class MarkController extends Controller
 
     public function store(Request $request)
     {
-        // ... (Keep existing store or redirect to bulk logic for consistency if single)
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot add marks.'], 403);
+        }
+
         // Let's implement bulk store for efficiency as UI usually sends array
         $validated = $request->validate([
             'marks' => 'required|array',
@@ -42,6 +58,17 @@ class MarkController extends Controller
             'marks.*.exam_type' => 'required|string|in:midterm,final,assignment',
             'marks.*.year' => 'required|integer',
         ]);
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $studentIds = array_column($validated['marks'], 'student_id');
+            $invalidCount = Student::whereIn('id', $studentIds)
+                ->where('department_id', '!=', auth()->user()->department_id)
+                ->count();
+            
+            if ($invalidCount > 0) {
+                 return response()->json(['message' => 'Unauthorized access to student(s) of another department.'], 403);
+            }
+        }
 
         $createdMarks = [];
         foreach ($validated['marks'] as $markData) {
@@ -70,6 +97,10 @@ class MarkController extends Controller
 
     public function update(Request $request, Mark $mark)
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot update marks.'], 403);
+        }
+
         $validated = $request->validate([
             'marks_obtained' => 'sometimes|required|numeric|min:0',
             'total_marks' => 'sometimes|required|numeric|min:0',
@@ -82,6 +113,10 @@ class MarkController extends Controller
 
     public function destroy(Mark $mark)
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot delete marks.'], 403);
+        }
+
         $mark->delete();
 
         return response()->json(['message' => 'Mark deleted successfully']);
@@ -89,13 +124,19 @@ class MarkController extends Controller
 
     public function getResults(Request $request)
     {
-        $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'year' => 'required|integer',
-        ]);
+        if (auth()->user()->hasRole('student')) {
+            $student = auth()->user()->student;
+            if (!$student) return response()->json(['results' => [], 'overall_percentage' => 0]);
+            $studentId = $student->id;
+        } else {
+            $request->validate(['student_id' => 'required|exists:students,id']);
+            $studentId = $request->student_id;
+        }
+
+        $request->validate(['year' => 'required|integer']);
 
         $marks = Mark::with('subject')
-            ->where('student_id', $request->student_id)
+            ->where('student_id', $studentId)
             ->where('year', $request->year)
             ->get();
 

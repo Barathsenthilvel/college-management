@@ -87,45 +87,45 @@ export default function IndividualNotification() {
     };
 
     return (
-        <div className="max-w-2xl mx-auto">
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">Send to Individual</h1>
+        <div className="max-w-3xl mx-auto">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-8">Send to Individual</h1>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                 <form onSubmit={handleSubmit} className="space-y-6">
                     {/* User Search Section */}
-                    <div className="border-b border-gray-200 pb-6 mb-6">
-                        <h2 className="text-lg font-medium text-gray-900 mb-4">Select User</h2>
+                    <div className="border-b border-gray-100 pb-8 mb-8">
+                        <h2 className="text-xl font-bold text-gray-900 mb-4">Select User</h2>
 
-                        <div className="flex space-x-4 mb-4">
-                            <label className="inline-flex items-center">
+                        <div className="flex space-x-6 mb-6">
+                            <label className="inline-flex items-center cursor-pointer">
                                 <input
                                     type="radio"
-                                    className="form-radio text-indigo-600"
+                                    className="form-radio text-indigo-600 h-5 w-5 focus:ring-indigo-500 border-gray-300"
                                     name="role"
                                     value="student"
                                     checked={userRole === 'student'}
                                     onChange={() => setUserRole('student')}
                                 />
-                                <span className="ml-2">Student</span>
+                                <span className="ml-3 text-sm font-semibold text-gray-700">Student</span>
                             </label>
-                            <label className="inline-flex items-center">
+                            <label className="inline-flex items-center cursor-pointer">
                                 <input
                                     type="radio"
-                                    className="form-radio text-indigo-600"
+                                    className="form-radio text-indigo-600 h-5 w-5 focus:ring-indigo-500 border-gray-300"
                                     name="role"
                                     value="staff"
                                     checked={userRole === 'staff'}
                                     onChange={() => setUserRole('staff')}
                                 />
-                                <span className="ml-2">Staff</span>
+                                <span className="ml-3 text-sm font-semibold text-gray-700">Staff</span>
                             </label>
                         </div>
 
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-3">
                             <input
                                 type="text"
                                 placeholder="Search by Name or Email..."
-                                className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                                className="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-gray-50/50 hover:bg-white"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -133,7 +133,7 @@ export default function IndividualNotification() {
                                 type="button"
                                 onClick={handleSearch}
                                 disabled={searching}
-                                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:bg-indigo-400"
+                                className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow-sm hover:bg-indigo-700 disabled:bg-gray-400 transition-all duration-200"
                             >
                                 {searching ? '...' : 'Search'}
                             </button>
@@ -141,18 +141,18 @@ export default function IndividualNotification() {
 
                         {/* Search Results */}
                         {searchResults.length > 0 && (
-                            <ul className="mt-2 border border-gray-200 rounded-md divide-y divide-gray-200 max-h-48 overflow-y-auto">
+                            <ul className="mt-4 border border-gray-100 rounded-xl divide-y divide-gray-100 max-h-48 overflow-y-auto bg-white shadow-sm">
                                 {searchResults.map(user => (
                                     <li
                                         key={user.id}
-                                        className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex justify-between items-center"
+                                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer flex justify-between items-center transition-colors"
                                         onClick={() => handleSelectUser(user)}
                                     >
                                         <div>
-                                            <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                                            <div className="text-xs text-gray-500">{user.email}</div>
+                                            <div className="text-sm font-bold text-gray-900">{user.name}</div>
+                                            <div className="text-xs text-gray-500 font-medium">{user.email}</div>
                                         </div>
-                                        <span className="text-indigo-600 text-xs font-semibold">Select</span>
+                                        <span className="text-indigo-600 text-sm font-bold bg-indigo-50 px-3 py-1 rounded-lg">Select</span>
                                     </li>
                                 ))}
                             </ul>
@@ -160,15 +160,15 @@ export default function IndividualNotification() {
 
                         {/* Selected User Display */}
                         {selectedUser && (
-                            <div className="mt-4 p-3 bg-indigo-50 border border-indigo-100 rounded-md flex justify-between items-center">
+                            <div className="mt-4 p-4 bg-indigo-50 border border-indigo-100 rounded-xl flex justify-between items-center shadow-sm">
                                 <div>
-                                    <span className="block text-sm font-semibold text-indigo-900">Selected: {selectedUser.name}</span>
-                                    <span className="block text-xs text-indigo-700">{userRole.toUpperCase()}</span>
+                                    <span className="block text-sm font-bold text-indigo-900">Selected: {selectedUser.name}</span>
+                                    <span className="block text-xs font-semibold text-indigo-700 mt-1">{userRole.toUpperCase()}</span>
                                 </div>
                                 <button
                                     type="button"
                                     onClick={() => setSelectedUser(null)}
-                                    className="text-red-500 hover:text-red-700 text-sm"
+                                    className="text-red-500 hover:text-red-700 text-sm font-bold bg-white px-3 py-1.5 rounded-lg shadow-sm border border-red-100 hover:border-red-200 transition-colors"
                                 >
                                     Remove
                                 </button>
@@ -178,87 +178,106 @@ export default function IndividualNotification() {
 
                     {/* Notification Details */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Title</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Title</label>
                         <input
                             type="text"
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            className="block w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-gray-50/50 hover:bg-white"
                             value={formData.title}
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                             required
+                            placeholder="Enter notification title"
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Notification Type</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Notification Type</label>
                         <select
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            className="block w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-gray-50/50 hover:bg-white appearance-none"
                             value={formData.category}
                             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                         >
-                            <option value="announcement">Announcement</option>
-                            <option value="alert">Alert</option>
-                            <option value="reminder">Reminder</option>
+                            <option value="announcement">📢 Announcement</option>
+                            <option value="alert">⚠️ Alert</option>
+                            <option value="reminder">⏰ Reminder</option>
                         </select>
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Message</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
                         <textarea
-                            rows={4}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                            rows={5}
+                            className="block w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 bg-gray-50/50 hover:bg-white resize-none"
                             value={formData.message}
                             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                             required
+                            placeholder="Write your message here..."
                         />
                     </div>
 
+                    {/* Send Via */}
                     <div>
-                        <span className="block text-sm font-medium text-gray-700 mb-2">Send Via</span>
-                        <div className="flex space-x-4">
-                            <label className="inline-flex items-center">
+                        <span className="block text-sm font-semibold text-gray-700 mb-3">Send Via Channels</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <label className={`flex items-center p-4 border rounded-xl transition-all duration-200 cursor-pointer ${formData.channels.includes('app') ? 'border-indigo-500 bg-indigo-50/50 ring-1 ring-indigo-500' : 'border-gray-200 bg-gray-50/50 hover:bg-white'}`}>
                                 <input
                                     type="checkbox"
-                                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
                                     checked={formData.channels.includes('app')}
                                     onChange={() => handleChannelChange('app')}
                                 />
-                                <span className="ml-2 text-gray-700">App Notification</span>
+                                <span className="ml-3 text-sm font-bold text-gray-700">App Notification</span>
                             </label>
-                            <label className="inline-flex items-center">
+                            <label className={`flex items-center p-4 border rounded-xl transition-all duration-200 cursor-pointer ${formData.channels.includes('sms') ? 'border-indigo-500 bg-indigo-50/50 ring-1 ring-indigo-500' : 'border-gray-200 bg-gray-50/50 hover:bg-white'}`}>
                                 <input
                                     type="checkbox"
-                                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
                                     checked={formData.channels.includes('sms')}
                                     onChange={() => handleChannelChange('sms')}
                                 />
-                                <span className="ml-2 text-gray-700">SMS</span>
+                                <span className="ml-3 text-sm font-bold text-gray-700">SMS</span>
                             </label>
-                            <label className="inline-flex items-center">
+                            <label className={`flex items-center p-4 border rounded-xl transition-all duration-200 cursor-pointer ${formData.channels.includes('email') ? 'border-indigo-500 bg-indigo-50/50 ring-1 ring-indigo-500' : 'border-gray-200 bg-gray-50/50 hover:bg-white'}`}>
                                 <input
                                     type="checkbox"
-                                    className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                    className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer"
                                     checked={formData.channels.includes('email')}
                                     onChange={() => handleChannelChange('email')}
                                 />
-                                <span className="ml-2 text-gray-700">Email</span>
+                                <span className="ml-3 text-sm font-bold text-gray-700">Email</span>
                             </label>
                         </div>
                     </div>
 
-                    <div className="flex space-x-3 pt-4 border-t border-gray-100">
-                        <button
-                            type="submit"
-                            disabled={sending}
-                            className="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:bg-gray-400"
-                        >
-                            {sending ? 'Sending...' : 'Send Notification'}
-                        </button>
+                    {/* Buttons */}
+                    <div className="flex space-x-4 pt-8 border-t border-gray-100 mt-8">
                         <button
                             type="button"
                             onClick={() => navigate('/notifications')}
-                            className="px-6 bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                            className="px-8 py-3 bg-white border border-gray-300 text-gray-700 font-bold rounded-xl hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all duration-200"
                         >
                             Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={sending}
+                            className="flex-1 bg-indigo-600 text-white font-bold py-3 px-6 rounded-xl shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+                        >
+                            {sending ? (
+                                <>
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Sending...
+                                </>
+                            ) : (
+                                <>
+                                    <span>Send to Individual</span>
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                </>
+                            )}
                         </button>
                     </div>
                 </form>

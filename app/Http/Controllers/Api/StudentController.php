@@ -14,6 +14,14 @@ class StudentController extends Controller
     {
         $query = Student::with('department');
 
+        if ($request->has('deleted') && $request->deleted === 'true') {
+            $query->onlyTrashed();
+        }
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $query->where('department_id', auth()->user()->department_id);
+        }
+
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
@@ -51,7 +59,10 @@ class StudentController extends Controller
             'phone' => 'nullable|string|max:20',
             'department_id' => 'required|exists:departments,id',
             'year' => 'required|integer|min:1|max:4',
-            'password' => 'nullable|string|min:8', // Optional password, will generate if not provided
+            'batch' => 'required|string|max:50',
+            'status' => 'required|in:active,inactive',
+            'password' => 'nullable|string|min:8|confirmed', // Optional password, will generate if not provided
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Generate a default password if not provided
@@ -67,6 +78,11 @@ class StudentController extends Controller
         // Assign student role
         $user->assignRole('student');
 
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('student_photos', 'public');
+        }
+
         // Create Student record
         $student = Student::create([
             'name' => $validated['name'],
@@ -74,7 +90,10 @@ class StudentController extends Controller
             'phone' => $validated['phone'] ?? null,
             'department_id' => $validated['department_id'],
             'year' => $validated['year'],
+            'batch' => $validated['batch'],
+            'status' => $validated['status'],
             'user_id' => $user->id,
+            'photo' => $photoPath,
         ]);
 
         return response()->json([
@@ -98,6 +117,8 @@ class StudentController extends Controller
             'phone' => 'nullable|string|max:20',
             'department_id' => 'sometimes|required|exists:departments,id',
             'year' => 'sometimes|required|integer|min:1|max:4',
+            'batch' => 'sometimes|required|string|max:50',
+            'status' => 'sometimes|required|in:active,inactive',
         ]);
 
         $student->update($validated);
@@ -110,6 +131,14 @@ class StudentController extends Controller
         $student->delete();
 
         return response()->json(['message' => 'Student deleted successfully']);
+    }
+
+    public function restore($id)
+    {
+        $student = Student::withTrashed()->findOrFail($id);
+        $student->restore();
+
+        return response()->json(['message' => 'Student restored successfully']);
     }
 }
 

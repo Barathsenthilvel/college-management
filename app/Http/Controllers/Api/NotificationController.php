@@ -38,6 +38,10 @@ class NotificationController extends Controller
 
     public function store(Request $request)
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot send notifications.'], 403);
+        }
+
         $validated = $request->validate([
             'user_id' => 'nullable|exists:users,id',
             'department_id' => 'nullable|exists:departments,id',

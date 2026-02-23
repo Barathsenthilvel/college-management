@@ -29,15 +29,20 @@ Route::middleware('auth:sanctum')->group(function () {
     // Dashboard
     Route::get('/dashboard/statistics', [DashboardController::class, 'statistics']);
 
-    // Departments
-    Route::apiResource('departments', DepartmentController::class);
+    // Departments (Admin only)
+    Route::middleware('staff.access')->group(function() {
+        Route::apiResource('departments', DepartmentController::class);
+    });
 
     // Students
+    Route::post('/students/{student}/restore', [StudentController::class, 'restore']);
     Route::apiResource('students', StudentController::class);
 
-    // Staff
-    Route::apiResource('staff', StaffController::class);
-    Route::post('/staff/{staff}/assign-roles', [StaffController::class, 'assignRoles']);
+    // Staff (Admin only)
+    Route::middleware('staff.access')->group(function() {
+        Route::apiResource('staff', StaffController::class);
+        Route::post('/staff/{staff}/assign-roles', [StaffController::class, 'assignRoles']);
+    });
 
     // Attendance
     Route::get('/attendance', [AttendanceController::class, 'index']);
@@ -46,10 +51,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/attendance/report', [AttendanceController::class, 'getReport']);
     Route::get('/attendance/department-report', [AttendanceController::class, 'getDepartmentReport']);
 
-    // Fees
-    Route::apiResource('fees', FeeController::class);
-    Route::post('/fees/{fee}/pay', [FeeController::class, 'addPayment']);
-    Route::get('/fees/statistics', [FeeController::class, 'getStatistics']);
+    // Fees (Admin only)
+    Route::middleware('staff.access')->group(function() {
+        Route::apiResource('fees', FeeController::class);
+        Route::post('/fees/{fee}/pay', [FeeController::class, 'addPayment']);
+        Route::get('/fees/statistics', [FeeController::class, 'getStatistics']);
+    });
 
     // Subjects
     Route::apiResource('subjects', SubjectController::class);
@@ -108,16 +115,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transport/vehicles', [\App\Http\Controllers\Api\TransportController::class, 'storeVehicle']);
     Route::post('/transport/allocate', [\App\Http\Controllers\Api\TransportController::class, 'allocate']);
 
-    // Audit Logs
-    Route::get('/audit-logs', [\App\Http\Controllers\Api\AuditController::class, 'index']);
+    // Audit Logs (Admin only)
+    Route::middleware('staff.access')->group(function() {
+        Route::get('/audit-logs', [\App\Http\Controllers\Api\AuditController::class, 'index']);
+    });
 
-    // Academic Year
-    Route::apiResource('academic-years', \App\Http\Controllers\Api\AcademicYearController::class);
+    // Academic Year (Admin only)
+    Route::middleware('staff.access')->group(function() {
+        Route::apiResource('academic-years', \App\Http\Controllers\Api\AcademicYearController::class);
+    });
 
-    // Backup
-    Route::get('/backups', [\App\Http\Controllers\Api\BackupController::class, 'index']);
-    Route::post('/backups', [\App\Http\Controllers\Api\BackupController::class, 'create']);
-    Route::get('/backups/{filename}', [\App\Http\Controllers\Api\BackupController::class, 'download']);
-    Route::delete('/backups/{filename}', [\App\Http\Controllers\Api\BackupController::class, 'delete']);
+    // Backup (Admin only)
+    Route::middleware('staff.access')->group(function() {
+        Route::get('/backups', [\App\Http\Controllers\Api\BackupController::class, 'index']);
+        Route::post('/backups', [\App\Http\Controllers\Api\BackupController::class, 'create']);
+        Route::get('/backups/{filename}', [\App\Http\Controllers\Api\BackupController::class, 'download']);
+        Route::delete('/backups/{filename}', [\App\Http\Controllers\Api\BackupController::class, 'delete']);
+    });
 });
 

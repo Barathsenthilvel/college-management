@@ -13,7 +13,11 @@ class LeaveController extends Controller
     {
         $query = Leave::with('user');
 
-        if (! $request->user()->hasRole('admin')) {
+        if ($request->user()->hasRole('staff') && $request->user()->department_id) {
+            $query->whereHas('user.student', function ($q) use ($request) {
+                $q->where('department_id', $request->user()->department_id);
+            });
+        } elseif (! $request->user()->hasRole('admin')) {
             $query->where('user_id', $request->user()->id);
         }
 

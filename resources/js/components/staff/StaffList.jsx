@@ -71,33 +71,33 @@ export default function StaffList() {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-3xl font-bold">Staff</h1>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">Staff</h1>
                 <Link
                     to="/staff/add"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-sm transition-all duration-200"
                 >
                     Add Staff
                 </Link>
             </div>
 
             {/* Filters & search */}
-            <div className="bg-white p-4 mb-4 rounded-lg shadow space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white p-6 mb-6 rounded-2xl shadow-sm border border-gray-100 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Search</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Search</label>
                         <input
                             type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             placeholder="Search by name or employee ID"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Department</label>
                         <select
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={departmentId}
                             onChange={(e) => setDepartmentId(e.target.value)}
                         >
@@ -110,10 +110,10 @@ export default function StaffList() {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Designation</label>
                         <input
                             type="text"
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             placeholder="Filter by designation"
                             value={designation}
                             onChange={(e) => setDesignation(e.target.value)}
@@ -123,83 +123,82 @@ export default function StaffList() {
             </div>
 
             {/* Screen 2 — Staff List table */}
-            <div className="bg-white shadow rounded-lg overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-100">
+                    <thead className="bg-gray-50/80 border-b border-gray-100">
                         <tr>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 S.No
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Photo
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Name
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Employee ID
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Department
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Designation
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Phone
                             </th>
-                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Status
                             </th>
-                            <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white divide-y divide-gray-50">
                         {staff.map((member, index) => (
-                            <tr key={member.id} className="hover:bg-gray-50">
-                                <td className="px-4 py-3 text-sm text-gray-700">{index + 1}</td>
-                                <td className="px-4 py-3">
+                            <tr key={member.id} className="hover:bg-gray-50/50 transition-colors duration-200">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
                                     {member.photo_path ? (
                                         <img
                                             src={`/storage/${member.photo_path}`}
                                             alt={member.name}
-                                            className="w-10 h-10 rounded-full object-cover"
+                                            className="w-10 h-10 rounded-full object-cover border-2 border-indigo-100 shadow-sm"
                                         />
                                     ) : (
-                                        <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-600">
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-50 to-blue-100 border border-indigo-100 flex items-center justify-center text-sm font-bold text-indigo-600 shadow-sm">
                                             {member.name ? member.name.charAt(0).toUpperCase() : '?'}
                                         </div>
                                     )}
                                 </td>
-                                <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                                     {member.name}
                                 </td>
-                                <td className="px-4 py-3 text-sm text-gray-700">{member.employee_id}</td>
-                                <td className="px-4 py-3 text-sm text-gray-700">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.employee_id}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {member.department?.department_name || '-'}
                                 </td>
-                                <td className="px-4 py-3 text-sm text-gray-700">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {member.designation || '-'}
                                 </td>
-                                <td className="px-4 py-3 text-sm text-gray-700">{member.phone || '-'}</td>
-                                <td className="px-4 py-3 text-sm">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.phone || '-'}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     <span
-                                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                            member.status === 'active'
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-red-100 text-red-800'
-                                        }`}
+                                        className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border ${member.status === 'active'
+                                                ? 'bg-green-50 text-green-700 border-green-200'
+                                                : 'bg-red-50 text-red-700 border-red-200'
+                                            }`}
                                     >
                                         {member.status === 'active' ? 'Active' : 'Inactive'}
                                     </span>
                                 </td>
-                                <td className="px-4 py-3 text-sm text-right">
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div className="inline-flex items-center gap-3">
                                         {/* View (placeholder, can link to a StaffProfile page) */}
                                         <button
-                                            className="text-indigo-600 hover:text-indigo-900"
+                                            className="text-gray-400 hover:text-blue-600 hover:scale-110 transition-all duration-200"
                                             title="View"
                                             disabled
                                         >
@@ -225,7 +224,7 @@ export default function StaffList() {
                                         </button>
                                         {/* Edit placeholder (wire later if needed) */}
                                         <button
-                                            className="text-indigo-600 hover:text-indigo-900"
+                                            className="text-gray-400 hover:text-indigo-600 hover:scale-110 transition-all duration-200"
                                             title="Edit"
                                             disabled
                                         >
@@ -246,7 +245,7 @@ export default function StaffList() {
                                         {/* Delete */}
                                         <button
                                             onClick={() => handleDelete(member.id)}
-                                            className="text-red-600 hover:text-red-800"
+                                            className="text-gray-400 hover:text-red-600 hover:scale-110 transition-all duration-200"
                                             title="Delete"
                                         >
                                             <svg

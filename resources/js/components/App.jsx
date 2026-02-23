@@ -1,5 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import GlobalLoader from './GlobalLoader';
 import Layout from './Layout';
 import Login from './auth/Login';
 import LoginLanding from './auth/LoginLanding';
@@ -13,6 +14,7 @@ import AddDepartment from './departments/AddDepartment';
 import EditDepartment from './departments/EditDepartment';
 import StudentList from './students/StudentList';
 import AddStudent from './students/AddStudent';
+import EditStudent from './students/EditStudent';
 import StudentProfile from './students/StudentProfile';
 import StaffList from './staff/StaffList';
 import AddStaff from './staff/AddStaff';
@@ -65,66 +67,71 @@ function App() {
     const canRegister = userRole === 'admin' || userRole === 'staff';
 
     return (
-        <Routes>
-            {/* Landing page - shows login options */}
-            <Route path="/" element={!token ? <LoginLanding /> : <Navigate to="/dashboard" replace />} />
-            {/* Role-specific login routes */}
-            <Route path="/student/login" element={!token ? <StudentLogin /> : <Navigate to="/dashboard" replace />} />
-            <Route path="/admin/login" element={!token ? <AdminLogin /> : <Navigate to="/dashboard" replace />} />
-            <Route path="/staff/login" element={!token ? <StaffLogin /> : <Navigate to="/dashboard" replace />} />
-            {/* General login route (redirects to landing page) */}
-            <Route path="/login" element={!token ? <Navigate to="/" replace /> : <Navigate to="/dashboard" replace />} />
-            <Route path="/register" element={token && canRegister ? <Register /> : token ? <Navigate to="/dashboard" replace /> : <Navigate to="/" replace />} />
-            <Route element={token ? <Layout /> : <Navigate to="/login" replace />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/departments" element={<DepartmentList />} />
-                <Route path="/departments/add" element={<AddDepartment />} />
-                <Route path="/departments/edit/:id" element={<EditDepartment />} />
-                <Route path="/students" element={<StudentList />} />
-                <Route path="/students/add" element={<AddStudent />} />
-                <Route path="/students/:id" element={<StudentProfile />} />
-                <Route path="/staff" element={<StaffList />} />
-                <Route path="/staff/add" element={<AddStaff />} />
-                <Route path="/staff/assign-roles" element={<AssignRoles />} />
-                <Route path="/attendance" element={<AttendanceDashboard />} />
-                <Route path="/attendance/view" element={<ViewAttendance />} />
-                <Route path="/attendance/report" element={<AttendanceReport />} />
-                <Route path="/fees" element={<FeesDashboard />} />
-                <Route path="/fees/collect" element={<FeeCollection />} />
-                <Route path="/fees/pending" element={<PendingFees />} />
-                <Route path="/fees/reports" element={<FeeReports />} />
-                <Route path="/exams" element={<ExamsDashboard />} />
-                <Route path="/exams/subjects" element={<SubjectManagement />} />
-                <Route path="/exams/marks/entry" element={<EnterMarks />} />
-                <Route path="/exams/results" element={<ResultReports />} />
+        <>
+            <GlobalLoader />
+            <Routes>
+                {/* Landing page - shows login options */}
+                <Route path="/" element={!token ? <LoginLanding /> : <Navigate to="/dashboard" replace />} />
+                {/* Role-specific login routes */}
+                <Route path="/student/login" element={!token ? <StudentLogin /> : <Navigate to="/dashboard" replace />} />
+                <Route path="/admin/login" element={!token ? <AdminLogin /> : <Navigate to="/dashboard" replace />} />
+                <Route path="/staff/login" element={!token ? <StaffLogin /> : <Navigate to="/dashboard" replace />} />
+                {/* General login route (redirects to landing page) */}
+                <Route path="/login" element={!token ? <Navigate to="/" replace /> : <Navigate to="/dashboard" replace />} />
+                <Route path="/register" element={token && canRegister ? <Register /> : token ? <Navigate to="/dashboard" replace /> : <Navigate to="/" replace />} />
+                <Route element={token ? <Layout /> : <Navigate to="/login" replace />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/departments" element={<DepartmentList />} />
+                    <Route path="/departments/add" element={<AddDepartment />} />
+                    <Route path="/departments/edit/:id" element={<EditDepartment />} />
+                    <Route path="/students" element={<StudentList />} />
+                    <Route path="/students/add" element={<AddStudent />} />
+                    <Route path="/students/edit/:id" element={<EditStudent />} />
+                    <Route path="/students/:id" element={<StudentProfile />} />
+                    <Route path="/staff" element={<StaffList />} />
+                    <Route path="/staff/add" element={<AddStaff />} />
+                    <Route path="/staff/assign-roles" element={<AssignRoles />} />
+                    <Route path="/attendance" element={<AttendanceDashboard />} />
+                    <Route path="/attendance/view" element={<ViewAttendance />} />
+                    <Route path="/attendance/report" element={<AttendanceReport />} />
+                    <Route path="/fees" element={<FeesDashboard />} />
+                    <Route path="/fees/collect" element={<FeeCollection />} />
+                    <Route path="/fees/pending" element={<PendingFees />} />
+                    <Route path="/fees/reports" element={<FeeReports />} />
+                    <Route path="/exams" element={<ExamsDashboard />} />
+                    <Route path="/exams/subjects" element={<SubjectManagement />} />
+                    <Route path="/subjects" element={<SubjectManagement />} />
+                    <Route path="/exams/marks/entry" element={<EnterMarks />} />
+                    <Route path="/exams/results" element={<ResultReports />} />
 
-                <Route path="/library" element={<LibraryDashboard />} />
+                    <Route path="/library" element={<LibraryDashboard />} />
 
-                <Route path="/notifications" element={<NotificationsDashboard />} />
-                <Route path="/notifications/broadcast" element={<SendToAll />} />
-                <Route path="/notifications/department" element={<DepartmentNotification />} />
-                <Route path="/notifications/individual" element={<IndividualNotification />} />
+                    <Route path="/notifications" element={<NotificationsDashboard />} />
+                    <Route path="/notifications/broadcast" element={<SendToAll />} />
+                    <Route path="/notifications/department" element={<DepartmentNotification />} />
+                    <Route path="/notifications/individual" element={<IndividualNotification />} />
 
-                <Route path="/leaves/apply" element={<ApplyLeave />} />
-                <Route path="/leaves/status" element={<LeaveStatus />} />
+                    <Route path="/leaves/apply" element={<ApplyLeave />} />
+                    <Route path="/leaves/status" element={<LeaveStatus />} />
 
-                <Route path="/settings/change-password" element={<ChangePassword />} />
-                <Route path="/settings/academic-years" element={<AcademicYearSettings />} />
-                <Route path="/settings/backups" element={<BackupManager />} />
+                    <Route path="/settings/change-password" element={<ChangePassword />} />
+                    <Route path="/settings/academic-years" element={<AcademicYearSettings />} />
+                    <Route path="/settings/backups" element={<BackupManager />} />
 
-                {/* <Route path="/leaves" element={<LeaveManagement />} /> */}
-                {/* Roles & Permissions route temporarily disabled */}
-                {/* <Route path="/roles-permissions" element={<RolesPermissions />} /> */}
-                {/* Settings route temporarily disabled */}
-                {/* <Route path="/settings" element={<Settings />} /> */}
-                <Route path="/timetable" element={<Timetable />} />
-                <Route path="/events" element={<EventCalendar />} />
-                <Route path="/hostel" element={<HostelDashboard />} />
-                <Route path="/transport" element={<TransportDashboard />} />
-                <Route path="/audit-logs" element={<AuditLogViewer />} />
-                <Route path="/id-cards" element={<IdCardGenerator />} />
-            </Route>
-        </Routes>
+                    {/* <Route path="/leaves" element={<LeaveManagement />} /> */}
+                    {/* Roles & Permissions route temporarily disabled */}
+                    {/* <Route path="/roles-permissions" element={<RolesPermissions />} /> */}
+                    {/* Settings route temporarily disabled */}
+                    {/* <Route path="/settings" element={<Settings />} /> */}
+                    <Route path="/timetable" element={<Timetable />} />
+                    <Route path="/events" element={<EventCalendar />} />
+                    <Route path="/hostel" element={<HostelDashboard />} />
+                    <Route path="/transport" element={<TransportDashboard />} />
+                    <Route path="/audit-logs" element={<AuditLogViewer />} />
+                    <Route path="/id-cards" element={<IdCardGenerator />} />
+                </Route>
+            </Routes>
+        </>
     );
 }
 

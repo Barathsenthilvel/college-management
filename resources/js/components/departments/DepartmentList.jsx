@@ -42,20 +42,20 @@ export default function DepartmentList() {
 
     return (
         <div>
-            <div className="flex justify-between items-center mb-4">
-                <h1 className="text-3xl font-bold">Departments</h1>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-2xl font-bold text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600">Departments</h1>
                 <Link
                     to="/departments/add"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-sm transition-all duration-200"
                 >
                     Add Department
                 </Link>
             </div>
 
             {/* Screen 2 - View Departments as table */}
-            <div className="bg-white shadow rounded-lg overflow-hidden">
-                <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+            <div className="bg-white shadow-sm border border-gray-100 rounded-2xl overflow-hidden">
+                <table className="min-w-full divide-y divide-gray-100">
+                    <thead className="bg-gray-50/80 border-b border-gray-100">
                         <tr>
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 S.No
@@ -77,36 +77,34 @@ export default function DepartmentList() {
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white divide-y divide-gray-50">
                         {departments.map((dept, index) => (
-                            <tr key={dept.id} className="hover:bg-gray-50">
-                                <td className="px-4 py-3 text-sm text-gray-700">{index + 1}</td>
-                                <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                            <tr key={dept.id} className="hover:bg-gray-50/50 transition-colors duration-200">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                                     {dept.department_name}
                                 </td>
-                                <td className="px-4 py-3 text-sm text-gray-700">{dept.department_code}</td>
-                                <td className="px-4 py-3 text-sm">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{dept.department_code}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     <span
-                                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                            dept.status === 'active'
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-red-100 text-red-800'
-                                        }`}
+                                        className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border ${dept.status === 'active'
+                                                ? 'bg-green-50 text-green-700 border-green-200'
+                                                : 'bg-red-50 text-red-700 border-red-200'
+                                            }`}
                                     >
                                         {dept.status === 'active' ? 'Active' : 'Inactive'}
                                     </span>
                                 </td>
-                                <td className="px-4 py-3 text-sm text-gray-700">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {dept.created_at
                                         ? new Date(dept.created_at).toLocaleDateString()
                                         : '-'}
                                 </td>
-                                <td className="px-4 py-3 text-sm text-right">
-                                    {/* Screen 3 - Actions with icons */}
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div className="inline-flex items-center gap-3">
                                         <Link
                                             to={`/departments/edit/${dept.id}`}
-                                            className="text-indigo-600 hover:text-indigo-900"
+                                            className="text-gray-400 hover:text-indigo-600 hover:scale-110 transition-all duration-200"
                                             title="Edit"
                                         >
                                             {/* Edit icon */}
@@ -126,7 +124,7 @@ export default function DepartmentList() {
                                         </Link>
                                         <button
                                             onClick={() => handleDelete(dept.id)}
-                                            className="text-red-600 hover:text-red-800"
+                                            className="text-gray-400 hover:text-red-600 hover:scale-110 transition-all duration-200"
                                             title="Delete"
                                         >
                                             {/* Delete icon */}

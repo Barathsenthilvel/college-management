@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \App\Http\Middleware\LogActivity::class,
         ]);
+        $middleware->alias([
+            'staff.access' => \App\Http\Middleware\StaffDepartmentAccess::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

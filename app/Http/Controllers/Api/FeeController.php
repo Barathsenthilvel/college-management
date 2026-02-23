@@ -14,7 +14,16 @@ class FeeController extends Controller
     {
         $query = Fee::with('student.department');
 
-        if ($request->has('student_id')) {
+        if (auth()->user()->hasRole('student')) {
+            $student = auth()->user()->student;
+            if ($student) {
+                $query->where('student_id', $student->id);
+            } else {
+                return response()->json(['data' => []]);
+            }
+        }
+
+        if ($request->has('student_id') && !auth()->user()->hasRole('student')) {
             $query->where('student_id', $request->student_id);
         }
 
@@ -33,6 +42,10 @@ class FeeController extends Controller
 
     public function store(Request $request)
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot add fee records.'], 403);
+        }
+
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
             'total_amount' => 'required|numeric|min:0',
@@ -91,6 +104,10 @@ class FeeController extends Controller
 
     public function addPayment(Request $request, Fee $fee)
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot add payments here.'], 403);
+        }
+
         $validated = $request->validate([
             'amount' => 'required|numeric|min:1',
             'payment_mode' => 'required|in:cash,upi,card,bank_transfer',
@@ -136,6 +153,10 @@ class FeeController extends Controller
 
     public function update(Request $request, Fee $fee)
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
         // Only allow updating basic details not affecting payments directly for now
         $validated = $request->validate([
             'total_amount' => 'sometimes|numeric|min:0',
@@ -150,6 +171,10 @@ class FeeController extends Controller
 
     public function destroy(Fee $fee)
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
         $fee->delete();
 
         return response()->json(['message' => 'Fee record deleted successfully']);
@@ -157,6 +182,10 @@ class FeeController extends Controller
 
     public function getStatistics()
     {
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+
         $totalDemand = Fee::sum('total_amount');
         $totalCollected = FeeTransaction::sum('amount');
         $pendingAmount = $totalDemand - $totalCollected;

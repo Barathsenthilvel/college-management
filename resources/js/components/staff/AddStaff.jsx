@@ -14,6 +14,8 @@ export default function AddStaff() {
         date_of_joining: '',
         address: '',
         status: 'active',
+        login_id: '',
+        password: '',
     });
     const [photoFile, setPhotoFile] = useState(null);
     const [departments, setDepartments] = useState([]);
@@ -82,6 +84,8 @@ export default function AddStaff() {
             date_of_joining: '',
             address: '',
             status: 'active',
+            login_id: '',
+            password: '',
         });
         setPhotoFile(null);
         setError('');
@@ -89,23 +93,23 @@ export default function AddStaff() {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold mb-4">Add Staff</h1>
-            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow">
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-6">Add Staff</h1>
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
                 {error && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                         {error}
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Staff Name */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Staff Name</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Staff Name</label>
                         <input
                             type="text"
                             name="name"
                             required
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.name}
                             onChange={handleChange}
                             placeholder="e.g. John Doe"
@@ -114,12 +118,12 @@ export default function AddStaff() {
 
                     {/* Employee ID */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Employee ID</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Employee ID</label>
                         <input
                             type="text"
                             name="employee_id"
                             required
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.employee_id}
                             onChange={handleChange}
                             placeholder="e.g. EMP001"
@@ -128,11 +132,11 @@ export default function AddStaff() {
 
                     {/* Department */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Department</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Department</label>
                         <select
                             name="department_id"
                             required
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.department_id}
                             onChange={handleChange}
                         >
@@ -147,25 +151,53 @@ export default function AddStaff() {
 
                     {/* Designation */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Designation</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Designation</label>
                         <input
                             type="text"
                             name="designation"
                             required
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.designation}
                             onChange={handleChange}
                             placeholder="e.g. Assistant Professor"
                         />
                     </div>
 
+                    {/* Login ID */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Login ID</label>
+                        <input
+                            type="text"
+                            name="login_id"
+                            required
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
+                            value={formData.login_id}
+                            onChange={handleChange}
+                            placeholder="e.g. staff_bca01"
+                        />
+                    </div>
+
+                    {/* Password */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            required
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="******"
+                        />
+                    </div>
+
                     {/* Phone Number */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Phone Number</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
                         <input
                             type="text"
                             name="phone"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.phone}
                             onChange={handleChange}
                             placeholder="e.g. 9876543210"
@@ -174,12 +206,12 @@ export default function AddStaff() {
 
                     {/* Email */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
                         <input
                             type="email"
                             name="email"
                             required
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="e.g. john.doe@example.com"
@@ -188,10 +220,10 @@ export default function AddStaff() {
 
                     {/* Gender */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Gender</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Gender</label>
                         <select
                             name="gender"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.gender}
                             onChange={handleChange}
                         >
@@ -204,11 +236,11 @@ export default function AddStaff() {
 
                     {/* Date of Joining */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Date of Joining</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Date of Joining</label>
                         <input
                             type="date"
                             name="date_of_joining"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.date_of_joining}
                             onChange={handleChange}
                         />
@@ -216,11 +248,11 @@ export default function AddStaff() {
 
                     {/* Address */}
                     <div className="md:col-span-2">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Address</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Address</label>
                         <textarea
                             name="address"
                             rows="3"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.address}
                             onChange={handleChange}
                             placeholder="Residential address"
@@ -229,21 +261,21 @@ export default function AddStaff() {
 
                     {/* Profile Photo */}
                     <div className="md:col-span-2">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Profile Photo</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Profile Photo</label>
                         <input
                             type="file"
                             accept="image/*"
                             onChange={handleFileChange}
-                            className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                         />
                     </div>
 
                     {/* Status */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Status</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>
                         <select
                             name="status"
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                             value={formData.status}
                             onChange={handleChange}
                         >
@@ -254,17 +286,17 @@ export default function AddStaff() {
                 </div>
 
                 {/* Buttons */}
-                <div className="mt-6 flex space-x-4">
+                <div className="mt-8 flex space-x-4">
                     <button
                         type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-md"
+                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg shadow-sm transition-all duration-200"
                     >
-                        Save
+                        Save Staff
                     </button>
                     <button
                         type="button"
                         onClick={handleReset}
-                        className="bg-gray-100 text-gray-800 border border-gray-300 hover:bg-gray-200 py-2 px-6 rounded-md"
+                        className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-2.5 px-6 rounded-lg shadow-sm transition-all duration-200"
                     >
                         Reset
                     </button>

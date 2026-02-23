@@ -172,14 +172,14 @@ export default function EnterMarks() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Enter Marks</h1>
+            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 mb-6">Enter Marks</h1>
 
             {/* Filters */}
-            <div className="bg-white rounded-lg shadow-md p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Department</label>
                     <select
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                         value={selectedDepartment}
                         onChange={(e) => setSelectedDepartment(e.target.value)}
                     >
@@ -188,9 +188,9 @@ export default function EnterMarks() {
                     </select>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Year</label>
                     <select
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                         value={selectedYear}
                         onChange={(e) => setSelectedYear(e.target.value)}
                     >
@@ -199,9 +199,9 @@ export default function EnterMarks() {
                     </select>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Subject</label>
                     <select
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white disabled:opacity-50 disabled:bg-gray-100"
                         value={selectedSubject}
                         onChange={(e) => setSelectedSubject(e.target.value)}
                         disabled={!selectedYear}
@@ -211,9 +211,9 @@ export default function EnterMarks() {
                     </select>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Exam Type</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Exam Type</label>
                     <select
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
                         value={examType}
                         onChange={(e) => setExamType(e.target.value)}
                     >
@@ -226,36 +226,36 @@ export default function EnterMarks() {
 
             {/* Marks Table */}
             {selectedSubject && (
-                <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     {loading ? (
-                        <div className="p-8 text-center text-gray-500">Loading students...</div>
+                        <div className="p-12 text-center text-gray-500 font-medium">Loading students...</div>
                     ) : students.length > 0 ? (
                         <>
                             <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-50">
+                                <table className="min-w-full divide-y divide-gray-100">
+                                    <thead className="bg-gray-50/80">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">S.No</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student Name</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Register No</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Marks Obtained</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Marks</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-16">S.No</th>
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Student Name</th>
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Register No</th>
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Marks Obtained</th>
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Total Marks</th>
+                                            <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Grade</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
+                                    <tbody className="bg-white divide-y divide-gray-50">
                                         {students.map((student, index) => {
                                             const mark = marks[student.id] || { marks_obtained: '', total_marks: 100 };
                                             return (
-                                                <tr key={student.id}>
+                                                <tr key={student.id} className="hover:bg-gray-50/50 transition-colors duration-200">
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{index + 1}</td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{student.name}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{student.name}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{student.id}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap">
                                                         <input
                                                             type="number"
                                                             min="0"
-                                                            className="w-24 px-2 py-1 border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
+                                                            className="w-24 px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm font-semibold text-center"
                                                             value={mark.marks_obtained}
                                                             onChange={(e) => handleMarkChange(student.id, 'marks_obtained', e.target.value)}
                                                         />
@@ -264,12 +264,12 @@ export default function EnterMarks() {
                                                         <input
                                                             type="number"
                                                             min="0"
-                                                            className="w-24 px-2 py-1 border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
+                                                            className="w-24 px-3 py-1.5 border border-gray-300 rounded-lg focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 transition-colors text-sm font-semibold text-center"
                                                             value={mark.total_marks}
                                                             onChange={(e) => handleMarkChange(student.id, 'total_marks', e.target.value)}
                                                         />
                                                     </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-700">
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-indigo-700">
                                                         {calculateGrade(mark.marks_obtained, mark.total_marks)}
                                                     </td>
                                                 </tr>
@@ -278,18 +278,18 @@ export default function EnterMarks() {
                                     </tbody>
                                 </table>
                             </div>
-                            <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+                            <div className="px-6 py-4 border-t border-gray-100 flex justify-end bg-gray-50/50">
                                 <button
                                     onClick={handleSave}
                                     disabled={saving}
-                                    className="px-8 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-gray-400 font-semibold"
+                                    className="px-8 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg shadow-sm hover:bg-indigo-700 disabled:bg-gray-400 transition-all duration-200"
                                 >
                                     {saving ? 'Saving...' : 'Save Marks'}
                                 </button>
                             </div>
                         </>
                     ) : (
-                        <div className="p-8 text-center text-gray-500">No students found.</div>
+                        <div className="p-12 text-center text-gray-500 font-medium">No students found.</div>
                     )}
                 </div>
             )}

@@ -42,14 +42,26 @@ class StaffController extends Controller
             'name' => 'required|string|max:255',
             'employee_id' => 'required|string|max:100|unique:staff,employee_id',
             'email' => 'required|email|unique:staff,email',
-            'department_id' => 'nullable|exists:departments,id',
+            'department_id' => 'required|exists:departments,id',
             'designation' => 'required|string|max:255',
             'phone' => 'nullable|string|max:20',
             'gender' => 'nullable|string|max:20',
             'date_of_joining' => 'nullable|date',
             'address' => 'nullable|string',
             'status' => 'required|in:active,inactive',
+            'login_id' => 'required|string|unique:users,username',
+            'password' => 'required|string|min:6',
         ]);
+
+        // Create User for login
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'username' => $validated['login_id'],
+            'password' => bcrypt($validated['password']),
+            'department_id' => $validated['department_id'],
+        ]);
+        $user->assignRole('staff');
 
         // Handle optional profile photo upload
         $photoPath = null;
@@ -59,7 +71,8 @@ class StaffController extends Controller
 
         $staff = Staff::create(array_merge($validated, [
             'photo_path' => $photoPath,
-            'role' => $request->input('role', 'staff'),
+            'role' => 'staff',
+            'department_id' => $validated['department_id'],
         ]));
 
         return response()->json($staff->load('department'), 201);

@@ -71,6 +71,12 @@ export default function Layout() {
         </svg>
     );
 
+    const SubjectsIcon = ({ className }) => (
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+    );
+
     const ExamsIcon = ({ className }) => (
         <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h4m-7 4h10a2 2 0 002-2V6.5A1.5 1.5 0 0017.5 5H16V4a2 2 0 00-2-2H10a2 2 0 00-2 2v1H6.5A1.5 1.5 0 005 6.5V18a2 2 0 002 2zM10 4h4v2h-4V4z" />
@@ -138,6 +144,7 @@ export default function Layout() {
         { key: 'departments', path: '/departments', label: 'Departments', icon: DepartmentIcon },
         { key: 'students', path: '/students', label: 'Students', icon: StudentIcon },
         { key: 'staff', path: '/staff', label: 'Staff', icon: StaffIcon },
+        { key: 'subjects', path: '/subjects', label: 'Subjects', icon: SubjectsIcon },
         { key: 'attendance', path: '/attendance', label: 'Attendance', icon: AttendanceIcon },
         { key: 'fees', path: '/fees', label: 'Fees', icon: FeesIcon },
         {
@@ -154,8 +161,7 @@ export default function Layout() {
         { key: 'transport', path: '/transport', label: 'Transport', icon: TransportIcon },
         { key: 'audit', path: '/audit-logs', label: 'Audit Logs', icon: AuditIcon },
         { key: 'id-cards', path: '/id-cards', label: 'ID Cards', icon: IdCardIcon },
-        // 'exams' menu temporarily hidden until page is stable
-        // { key: 'exams', path: '/exams-marks', label: 'Exams & Marks', icon: ExamsIcon },
+        { key: 'exams', path: '/exams-marks', label: 'Exams & Marks', icon: ExamsIcon },
         // 'reports' menu temporarily hidden until page is stable
         // { key: 'reports', path: '/reports', label: 'Reports', icon: ReportsIcon },
         {
@@ -174,16 +180,29 @@ export default function Layout() {
                 // Admin sees all menus
                 return baseMenuItems;
             case 'staff':
-                // Staff: no departments, roles, settings
-                // Staff needs settings
+                // Staff: exclude admin-only menus
                 return baseMenuItems.filter((item) =>
-                    !['departments', 'roles', 'exams'].includes(item.key)
-                );
+                    !['departments', 'roles', 'audit', 'fees', 'reports', 'settings'].includes(item.key)
+                ).concat([
+                    {
+                        key: 'settings', label: 'Settings', icon: SettingsIcon, subItems: [
+                            { path: '/settings/change-password', label: 'Change Password' },
+                            { path: '#logout', label: 'Logout', action: true },
+                        ]
+                    }
+                ]);
             case 'student':
-                // Students: dashboard, attendance, fees, reports, leaves, notifications, settings, library, timetable, events, hostel, transport
+                // Students: Dashboard, Profile, Attendance, Results/Marks, Fees, ID Card, Leave, Notifications, Settings
                 return baseMenuItems.filter((item) =>
-                    ['dashboard', 'attendance', 'fees', 'reports', 'leaves', 'notifications', 'settings', 'library', 'timetable', 'events', 'hostel', 'transport'].includes(item.key)
-                );
+                    ['dashboard', 'attendance', 'exams', 'fees', 'id-cards', 'leaves', 'notifications'].includes(item.key)
+                ).concat([
+                    {
+                        key: 'settings', label: 'Settings', icon: SettingsIcon, subItems: [
+                            { path: '/settings/change-password', label: 'Change Password' },
+                            { path: '#logout', label: 'Logout', action: true },
+                        ]
+                    }
+                ]);
             default:
                 return baseMenuItems;
         }

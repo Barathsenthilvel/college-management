@@ -20,6 +20,10 @@ class ReportController extends Controller
         ]);
 
         $student = Student::with('department')->findOrFail($request->student_id);
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id && auth()->user()->department_id !== $student->department_id) {
+            abort(403, 'Unauthorized access to student of another department.');
+        }
         $marks = Mark::with('subject')
             ->where('student_id', $request->student_id)
             ->where('year', $request->year)
@@ -60,6 +64,11 @@ class ReportController extends Controller
         ]);
 
         $student = Student::with('department')->findOrFail($request->student_id);
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id && auth()->user()->department_id !== $student->department_id) {
+            abort(403, 'Unauthorized access to student of another department.');
+        }
+
         $attendance = Attendance::where('student_id', $request->student_id)
             ->whereBetween('date', [$request->from_date, $request->to_date])
             ->get();
@@ -92,6 +101,10 @@ class ReportController extends Controller
         ]);
 
         $fee = Fee::with('student.department')->findOrFail($request->fee_id);
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id && auth()->user()->department_id !== $fee->student->department_id) {
+            abort(403, 'Unauthorized access to student of another department.');
+        }
 
         $pdf = PDF::loadView('reports.fee_receipt', [
             'fee' => $fee,

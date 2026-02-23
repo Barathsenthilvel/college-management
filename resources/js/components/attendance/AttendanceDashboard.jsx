@@ -2,11 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function AttendanceDashboard() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const isStudent = user.role === 'student';
+
     return (
         <div className="space-y-6">
             <h1 className="text-3xl font-bold text-gray-900">Attendance Module</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={`grid grid-cols-1 ${!isStudent ? 'md:grid-cols-2' : ''} gap-6`}>
                 {/* View / Mark Attendance Card */}
                 <Link to="/attendance/view" className="block group">
                     <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-500 hover:shadow-lg transition-shadow">
@@ -22,20 +25,22 @@ export default function AttendanceDashboard() {
                     </div>
                 </Link>
 
-                {/* Department Report Card */}
-                <Link to="/attendance/report" className="block group">
-                    <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="p-3 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
-                                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-6m4 6V7m4 10V9M5 21h14a2 2 0 002-2V7.414a2 2 0 00-.586-1.414l-3.414-3.414A2 2 0 0015.586 2H5a2 2 0 00-2 2v15a2 2 0 002 2z" />
-                                </svg>
+                {/* Department Report Card - Hidden for students */}
+                {!isStudent && (
+                    <Link to="/attendance/report" className="block group">
+                        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="p-3 bg-green-100 rounded-lg group-hover:bg-green-200 transition-colors">
+                                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-6m4 6V7m4 10V9M5 21h14a2 2 0 002-2V7.414a2 2 0 00-.586-1.414l-3.414-3.414A2 2 0 0015.586 2H5a2 2 0 00-2 2v15a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
                             </div>
+                            <h2 className="text-xl font-semibold text-gray-900 group-hover:text-green-600 transition-colors">Department Reports</h2>
+                            <p className="mt-2 text-gray-600">View attendance summaries and statistics by department. Export reports and view charts.</p>
                         </div>
-                        <h2 className="text-xl font-semibold text-gray-900 group-hover:text-green-600 transition-colors">Department Reports</h2>
-                        <p className="mt-2 text-gray-600">View attendance summaries and statistics by department. Export reports and view charts.</p>
-                    </div>
-                </Link>
+                    </Link>
+                )}
             </div>
         </div>
     );

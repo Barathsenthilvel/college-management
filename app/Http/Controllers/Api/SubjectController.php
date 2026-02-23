@@ -12,8 +12,13 @@ class SubjectController extends Controller
     {
         $query = Subject::with('department', 'staff');
 
-        if ($request->has('department_id')) {
-            $query->where('department_id', $request->department_id);
+        // Apply Staff Access Restrictions
+        if ($request->user()->hasRole('staff')) {
+            $query->where('department_id', $request->user()->department_id);
+        } else {
+            if ($request->has('department_id')) {
+                $query->where('department_id', $request->department_id);
+            }
         }
 
         if ($request->has('year')) {
@@ -41,18 +46,30 @@ class SubjectController extends Controller
             'status' => 'required|in:active,inactive',
         ]);
 
+        if ($request->user()->hasRole('staff')) {
+            $validated['department_id'] = $request->user()->department_id;
+        }
+
         $subject = Subject::create($validated);
 
         return response()->json($subject->load('department', 'staff'), 201);
     }
 
-    public function show(Subject $subject)
+    public function show(Request $request, Subject $subject)
     {
+        if ($request->user()->hasRole('staff') && $request->user()->department_id !== $subject->department_id) {
+            return response()->json(['message' => 'Unauthorized access to subject data'], 403);
+        }
+        
         return response()->json($subject->load('department', 'staff'));
     }
 
     public function update(Request $request, Subject $subject)
     {
+        if ($request->user()->hasRole('staff') && $request->user()->department_id !== $subject->department_id) {
+            return response()->json(['message' => 'Unauthorized to update this subject'], 403);
+        }
+
         $validated = $request->validate([
             'subject_name' => 'sometimes|required|string|max:255',
             'subject_code' => 'sometimes|required|string|unique:subjects,subject_code,' . $subject->id,
@@ -63,13 +80,21 @@ class SubjectController extends Controller
             'status' => 'sometimes|required|in:active,inactive',
         ]);
 
+        if ($request->user()->hasRole('staff')) {
+            $validated['department_id'] = $request->user()->department_id;
+        }
+
         $subject->update($validated);
 
         return response()->json($subject->load('department'));
     }
 
-    public function destroy(Subject $subject)
+    public function destroy(Request $request, Subject $subject)
     {
+        if ($request->user()->hasRole('staff') && $request->user()->department_id !== $subject->department_id) {
+            return response()->json(['message' => 'Unauthorized to delete this subject'], 403);
+        }
+
         $subject->delete();
 
         return response()->json(['message' => 'Subject deleted successfully']);

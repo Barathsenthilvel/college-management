@@ -4,13 +4,16 @@ import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
 export default function ResultReports() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const isStudent = user.role === 'student';
+
     const [departments, setDepartments] = useState([]);
     const [students, setStudents] = useState([]);
 
     // Filters
     const [selectedDepartment, setSelectedDepartment] = useState('');
     const [selectedYear, setSelectedYear] = useState('');
-    const [selectedStudent, setSelectedStudent] = useState('');
+    const [selectedStudent, setSelectedStudent] = useState(isStudent ? 'me' : '');
 
     // Results Data
     const [results, setResults] = useState([]);
@@ -122,17 +125,19 @@ export default function ResultReports() {
 
             {/* Filters */}
             <div className="bg-white rounded-lg shadow-md p-6 grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
-                    <select
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                        value={selectedDepartment}
-                        onChange={(e) => setSelectedDepartment(e.target.value)}
-                    >
-                        <option value="">Select Department</option>
-                        {departments.map(d => <option key={d.id} value={d.id}>{d.department_name}</option>)}
-                    </select>
-                </div>
+                {!isStudent && (
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                        <select
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                            value={selectedDepartment}
+                            onChange={(e) => setSelectedDepartment(e.target.value)}
+                        >
+                            <option value="">Select Department</option>
+                            {departments.map(d => <option key={d.id} value={d.id}>{d.department_name}</option>)}
+                        </select>
+                    </div>
+                )}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
                     <select
@@ -144,18 +149,20 @@ export default function ResultReports() {
                         {[1, 2, 3, 4].map(y => <option key={y} value={y}>Year {y}</option>)}
                     </select>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Student</label>
-                    <select
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
-                        value={selectedStudent}
-                        onChange={(e) => setSelectedStudent(e.target.value)}
-                        disabled={!selectedDepartment || !selectedYear}
-                    >
-                        <option value="">Select Student</option>
-                        {students.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-                    </select>
-                </div>
+                {!isStudent && (
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Student</label>
+                        <select
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                            value={selectedStudent}
+                            onChange={(e) => setSelectedStudent(e.target.value)}
+                            disabled={!selectedDepartment || !selectedYear}
+                        >
+                            <option value="">Select Student</option>
+                            {students.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                        </select>
+                    </div>
+                )}
                 <div>
                     <button
                         onClick={handleGenerate}

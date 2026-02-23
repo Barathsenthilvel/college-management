@@ -14,7 +14,20 @@ class AttendanceController extends Controller
     {
         $query = Attendance::with('student.department');
 
-        if ($request->has('student_id')) {
+        if (auth()->user()->hasRole('student')) {
+            $student = auth()->user()->student;
+            if ($student) {
+                $query->where('student_id', $student->id);
+            } else {
+                return response()->json(['data' => []]);
+            }
+        } elseif (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $query->whereHas('student', function ($q) {
+                $q->where('department_id', auth()->user()->department_id);
+            });
+        }
+
+        if ($request->has('student_id') && !auth()->user()->hasRole('student')) {
             $query->where('student_id', $request->student_id);
         }
 
@@ -55,6 +68,17 @@ class AttendanceController extends Controller
             'remarks' => 'nullable|string|max:255',
         ]);
 
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot mark attendance.'], 403);
+        }
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $student = Student::find($validated['student_id']);
+            if ($student->department_id !== auth()->user()->department_id) {
+                return response()->json(['message' => 'Unauthorized access to student of another department.'], 403);
+            }
+        }
+
         $data = ['status' => $validated['status']];
         if ($validated['status'] === 'late' && isset($validated['late_hours'])) {
             $data['late_hours'] = $validated['late_hours'];
@@ -84,6 +108,21 @@ class AttendanceController extends Controller
             'attendance.*.late_hours' => 'nullable|numeric|min:0|max:24',
             'attendance.*.remarks' => 'nullable|string|max:255',
         ]);
+
+        if (auth()->user()->hasRole('student')) {
+            return response()->json(['message' => 'Unauthorized. Students cannot mark attendance.'], 403);
+        }
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $studentIds = array_column($validated['attendance'], 'student_id');
+            $invalidCount = Student::whereIn('id', $studentIds)
+                ->where('department_id', '!=', auth()->user()->department_id)
+                ->count();
+            
+            if ($invalidCount > 0) {
+                 return response()->json(['message' => 'Unauthorized access to student(s) of another department.'], 403);
+            }
+        }
 
         DB::beginTransaction();
         try {
@@ -125,7 +164,22 @@ class AttendanceController extends Controller
         $query = Attendance::with('student.department')
             ->whereBetween('date', [$request->from_date, $request->to_date]);
 
-        if ($request->has('student_id')) {
+        if (auth()->user()->hasRole('student')) {
+            $student = auth()->user()->student;
+            if ($student) {
+                $query->where('student_id', $student->id);
+            } else {
+                return response()->json([
+                    'total_days' => 0, 'present_days' => 0, 'absent_days' => 0, 'attendance_percentage' => 0
+                ]);
+            }
+        } elseif (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $query->whereHas('student', function ($q) {
+                $q->where('department_id', auth()->user()->department_id);
+            });
+        }
+
+        if ($request->has('student_id') && !auth()->user()->hasRole('student')) {
             $query->where('student_id', $request->student_id);
         }
 
@@ -164,7 +218,13 @@ class AttendanceController extends Controller
             'to_date' => 'required|date',
         ]);
 
-        $departments = \App\Models\Department::withCount('students')->get();
+        $departmentsQuery = \App\Models\Department::withCount('students');
+
+        if (auth()->user()->hasRole('staff') && auth()->user()->department_id) {
+            $departmentsQuery->where('id', auth()->user()->department_id);
+        }
+
+        $departments = $departmentsQuery->get();
         
         $report = $departments->map(function ($department) use ($request) {
             // Get all student IDs for this department
