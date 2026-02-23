@@ -161,7 +161,7 @@ export default function Layout() {
         { key: 'transport', path: '/transport', label: 'Transport', icon: TransportIcon },
         { key: 'audit', path: '/audit-logs', label: 'Audit Logs', icon: AuditIcon },
         { key: 'id-cards', path: '/id-cards', label: 'ID Cards', icon: IdCardIcon },
-        { key: 'exams', path: '/exams-marks', label: 'Exams & Marks', icon: ExamsIcon },
+        { key: 'exams', path: '/exams', label: 'Exams & Marks', icon: ExamsIcon },
         // 'reports' menu temporarily hidden until page is stable
         // { key: 'reports', path: '/reports', label: 'Reports', icon: ReportsIcon },
         {
