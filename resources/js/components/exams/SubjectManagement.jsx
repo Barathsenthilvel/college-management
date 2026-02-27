@@ -131,36 +131,22 @@ export default function SubjectManagement() {
         setShowModal(true);
     };
 
-    // Filter departments based on program type if selected (assuming naming conventions like "B.Com" or "B.Tech" or "M.Sc")
-    // If exact mapping is unknown, we just categorize them loosely or just let the user see all if no type selected
     const getFilteredDepartments = () => {
-        if (!programType && !subProgramType) return departments;
-
+        if (!programType) return departments;
         const pt = programType.toLowerCase();
-        const spt = subProgramType.toLowerCase();
 
         return departments.filter(d => {
-            const name = d.department_name.toLowerCase();
-
-            if (spt) {
-                if (spt === 'ba' && (name.includes('b.a') || name.includes('ba '))) return true;
-                if (spt === 'bcom' && (name.includes('b.com') || name.includes('commerce'))) return true;
-                if (spt === 'bsc' && (name.includes('b.sc') || name.includes('science'))) return true;
-                if (spt === 'bba' && (name.includes('bba') || name.includes('business'))) return true;
-                if (spt === 'be' && (name.includes('b.e') || name.includes('engineering') || name.includes('technology'))) return true;
-                if (spt === 'btech' && (name.includes('b.tech') || name.includes('engineering') || name.includes('technology'))) return true;
-                if (spt === 'ma' && (name.includes('m.a') || name.includes('ma '))) return true;
-                if (spt === 'msc' && (name.includes('m.sc') || name.includes('science'))) return true;
-                if (spt === 'mba' && (name.includes('mba') || name.includes('business'))) return true;
-                if (spt === 'mca' && (name.includes('mca') || name.includes('computer'))) return true;
-                if (spt === 'me' && (name.includes('m.e') || name.includes('engineering'))) return true;
-                if (spt === 'mtech' && (name.includes('m.tech') || name.includes('engineering'))) return true;
+            if (d.program_type) {
+                if (pt === 'arts' && d.program_type === 'arts') return true;
+                if (pt === 'engineering' && d.program_type === 'engineering') return true;
+                if (pt === 'pg' && d.program_type === 'pg') return true;
                 return false;
             }
-
+            // Fallback for older data without program_type
+            const name = d.department_name.toLowerCase();
             if (pt === 'arts' && (name.includes('arts') || name.includes('commerce') || name.includes('b.a') || name.includes('b.com') || name.includes('b.sc') || name.includes('bba') || name.includes('science'))) return true;
             if (pt === 'engineering' && (name.includes('engineering') || name.includes('b.e') || name.includes('b.tech') || name.includes('computer') || name.includes('technology'))) return true;
-            if (pt === 'master' && (name.includes('master') || name.includes('m.a') || name.includes('m.sc') || name.includes('m.tech') || name.includes('m.e') || name.includes('mca') || name.includes('mba'))) return true;
+            if (pt === 'pg' && (name.includes('master') || name.includes('m.a') || name.includes('m.sc') || name.includes('m.tech') || name.includes('m.e') || name.includes('mca') || name.includes('mba'))) return true;
             return false;
         });
     };
@@ -206,7 +192,7 @@ export default function SubjectManagement() {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 bg-gray-50/50 group-hover:bg-white transition-colors uppercase">{subject.subject_code}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                                             <div className="font-semibold text-gray-800">{subject.department?.department_name}</div>
-                                            <div className="text-xs text-gray-500 mt-0.5">Semester {subject.year}</div>
+                                            <div className="text-xs text-center inline-block bg-indigo-50 border border-indigo-100 text-indigo-700 px-2 py-0.5 rounded font-bold mt-1">Year {subject.year}</div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
                                             {subject.staff ? (
@@ -281,71 +267,28 @@ export default function SubjectManagement() {
                                     Academic Placement
                                 </h3>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pl-11">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pl-11">
                                     {!currentUser?.roles?.some(r => r.name === 'staff') && (
-                                        <>
-                                            <div>
-                                                <label className="block text-sm font-semibold text-gray-700 mb-1">1. Program Area</label>
-                                                <select
-                                                    className="block w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all bg-white"
-                                                    value={programType}
-                                                    onChange={(e) => {
-                                                        setProgramType(e.target.value);
-                                                        setSubProgramType(''); // Reset sub on change
-                                                        setFormData({ ...formData, department_id: '' }); // Reset department on change
-                                                    }}
-                                                >
-                                                    <option value="">All Programs</option>
-                                                    <option value="Arts">Arts, Science & Commerce</option>
-                                                    <option value="Engineering">Engineering & Technology</option>
-                                                    <option value="Master">Postgraduate / Master's</option>
-                                                </select>
-                                            </div>
-
-                                            {programType && (
-                                                <div>
-                                                    <label className="block text-sm font-semibold text-gray-700 mb-1">2. Degree Type</label>
-                                                    <select
-                                                        className="block w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all bg-white"
-                                                        value={subProgramType}
-                                                        onChange={(e) => {
-                                                            setSubProgramType(e.target.value);
-                                                            setFormData({ ...formData, department_id: '' }); // Reset department on change
-                                                        }}
-                                                    >
-                                                        <option value="">All Degrees in {programType}</option>
-                                                        {programType === 'Arts' && (
-                                                            <>
-                                                                <option value="BA">B.A. (Bachelor of Arts)</option>
-                                                                <option value="BSc">B.Sc. (Bachelor of Science)</option>
-                                                                <option value="BCom">B.Com. (Bachelor of Commerce)</option>
-                                                                <option value="BBA">BBA (Bachelor of Business Admin)</option>
-                                                            </>
-                                                        )}
-                                                        {programType === 'Engineering' && (
-                                                            <>
-                                                                <option value="BE">B.E. (Bachelor of Engineering)</option>
-                                                                <option value="BTech">B.Tech. (Bachelor of Technology)</option>
-                                                            </>
-                                                        )}
-                                                        {programType === 'Master' && (
-                                                            <>
-                                                                <option value="MA">M.A. (Master of Arts)</option>
-                                                                <option value="MSc">M.Sc. (Master of Science)</option>
-                                                                <option value="MBA">MBA (Master of Business Admin)</option>
-                                                                <option value="MCA">MCA (Master of Computer Apps)</option>
-                                                                <option value="ME">M.E. (Master of Engineering)</option>
-                                                                <option value="MTech">M.Tech. (Master of Technology)</option>
-                                                            </>
-                                                        )}
-                                                    </select>
-                                                </div>
-                                            )}
-                                        </>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1">1. Program Area</label>
+                                            <select
+                                                className="block w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all bg-white"
+                                                value={programType}
+                                                onChange={(e) => {
+                                                    setProgramType(e.target.value);
+                                                    setFormData({ ...formData, department_id: '' }); // Reset department on change
+                                                }}
+                                            >
+                                                <option value="">All Programs</option>
+                                                <option value="Arts">Arts, Science & Commerce</option>
+                                                <option value="Engineering">Engineering & Technology</option>
+                                                <option value="PG">Postgraduate (PG)</option>
+                                            </select>
+                                        </div>
                                     )}
 
-                                    <div className={currentUser?.roles?.some(r => r.name === 'staff') ? 'md:col-span-3' : (programType ? 'md:col-span-1' : 'md:col-span-2')}>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1">{currentUser?.roles?.some(r => r.name === 'staff') ? '1.' : (programType ? '3.' : '2.')} Department</label>
+                                    <div className={currentUser?.roles?.some(r => r.name === 'staff') ? 'md:col-span-2' : ''}>
+                                        <label className="block text-sm font-semibold text-gray-700 mb-1">{currentUser?.roles?.some(r => r.name === 'staff') ? '1.' : '2.'} Program / Department</label>
                                         <select
                                             className={`block w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all ${currentUser?.roles?.some(r => r.name === 'staff') ? 'bg-gray-100 cursor-not-allowed text-gray-600 font-medium' : 'bg-white'}`}
                                             value={formData.department_id}
@@ -353,35 +296,35 @@ export default function SubjectManagement() {
                                             required
                                             disabled={currentUser && currentUser.roles && currentUser.roles.some(r => r.name === 'staff')}
                                         >
-                                            <option value="">Select Department</option>
+                                            <option value="">Select Program</option>
                                             {filteredDepartments.length > 0 ? (
                                                 filteredDepartments.map(d => (
                                                     <option key={d.id} value={d.id}>{d.department_name}</option>
                                                 ))
                                             ) : (
-                                                <option disabled value="">No departments match this program</option>
+                                                <option disabled value="">No programs match this area</option>
                                             )}
                                         </select>
                                         {currentUser?.roles?.some(r => r.name === 'staff') && (
-                                            <p className="text-xs text-indigo-600 mt-1.5 font-medium">As Staff, you are adding subjects strictly to your assigned department.</p>
+                                            <p className="text-xs text-indigo-600 mt-1.5 font-medium">As Staff, you are adding subjects strictly to your assigned program.</p>
                                         )}
                                     </div>
 
-                                    <div className="md:col-span-3">
-                                        <label className="block text-sm font-semibold text-gray-700 mb-1">{currentUser?.roles?.some(r => r.name === 'staff') ? '2.' : (programType ? '4.' : '3.')} Semester</label>
-                                        <div className="grid grid-cols-4 sm:grid-cols-8 gap-2 mt-2">
-                                            {[1, 2, 3, 4, 5, 6, 7, 8].map(sem => (
-                                                <label key={sem} className={`cursor-pointer rounded-lg border-2 text-center py-2 transition-all font-bold ${formData.year === String(sem) ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300'}`}>
+                                    <div className="md:col-span-2">
+                                        <label className="block text-sm font-semibold text-gray-700 mb-1">{currentUser?.roles?.some(r => r.name === 'staff') ? '2.' : '3.'} Academic Year</label>
+                                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
+                                            {[1, 2, 3, 4].map(year => (
+                                                <label key={year} className={`cursor-pointer rounded-lg border-2 text-center py-3 transition-all font-bold shadow-sm ${String(formData.year) === String(year) ? 'border-indigo-600 bg-indigo-50 text-indigo-700' : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300'}`}>
                                                     <input
                                                         type="radio"
-                                                        name="semester"
-                                                        value={sem}
-                                                        checked={formData.year === String(sem)}
+                                                        name="year"
+                                                        value={year}
+                                                        checked={String(formData.year) === String(year)}
                                                         onChange={(e) => setFormData({ ...formData, year: e.target.value })}
                                                         className="hidden"
                                                         required
                                                     />
-                                                    Sem {sem}
+                                                    {year}{year === 1 ? 'st' : year === 2 ? 'nd' : year === 3 ? 'rd' : 'th'} Year
                                                 </label>
                                             ))}
                                         </div>

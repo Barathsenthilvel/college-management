@@ -149,10 +149,21 @@ export default function AddStudent() {
                             onChange={handleChange}
                         >
                             <option value="">Select Department</option>
-                            {departments.map((dept) => (
-                                <option key={dept.id} value={dept.id}>
-                                    {dept.department_name}
-                                </option>
+                            {Object.entries(
+                                departments.reduce((acc, dept) => {
+                                    const type = dept.program_type ? dept.program_type.charAt(0).toUpperCase() + dept.program_type.slice(1) : 'Other Programs';
+                                    if (!acc[type]) acc[type] = [];
+                                    acc[type].push(dept);
+                                    return acc;
+                                }, {})
+                            ).map(([type, depts]) => (
+                                <optgroup key={type} label={type}>
+                                    {depts.map((dept) => (
+                                        <option key={dept.id} value={dept.id}>
+                                            {dept.department_name}
+                                        </option>
+                                    ))}
+                                </optgroup>
                             ))}
                         </select>
                         {isStaff && (

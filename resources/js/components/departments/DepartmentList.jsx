@@ -67,6 +67,9 @@ export default function DepartmentList() {
                                 Department Code
                             </th>
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Program Type
+                            </th>
+                            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Status
                             </th>
                             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -85,11 +88,16 @@ export default function DepartmentList() {
                                     {dept.department_name}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{dept.department_code}</td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">
+                                    {dept.program_type === 'engineering' ? 'Engineering' :
+                                        dept.program_type === 'arts' ? 'Arts / Science' :
+                                            dept.program_type === 'pg' ? 'Post Graduate (PG)' : '-'}
+                                </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                                     <span
                                         className={`px-3 py-1 inline-flex text-xs leading-5 font-bold rounded-full border ${dept.status === 'active'
-                                                ? 'bg-green-50 text-green-700 border-green-200'
-                                                : 'bg-red-50 text-red-700 border-red-200'
+                                            ? 'bg-green-50 text-green-700 border-green-200'
+                                            : 'bg-red-50 text-red-700 border-red-200'
                                             }`}
                                     >
                                         {dept.status === 'active' ? 'Active' : 'Inactive'}

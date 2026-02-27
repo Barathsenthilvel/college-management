@@ -19,6 +19,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'department_name' => 'required|string|max:255',
             'department_code' => 'required|string|max:50|unique:departments,department_code',
+            'program_type' => 'required|string|in:arts,engineering,pg',
             'description' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);
@@ -38,6 +39,7 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'department_name' => 'sometimes|required|string|max:255',
             'department_code' => 'sometimes|required|string|max:50|unique:departments,department_code,' . $department->id,
+            'program_type' => 'sometimes|required|string|in:arts,engineering,pg',
             'description' => 'nullable|string',
             'status' => 'sometimes|required|in:active,inactive',
         ]);

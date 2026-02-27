@@ -5,6 +5,7 @@ import axios from 'axios';
 export default function EditDepartment() {
     const { id } = useParams();
     const [name, setName] = useState('');
+    const [programType, setProgramType] = useState('engineering');
     const [status, setStatus] = useState('active');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(true);
@@ -21,6 +22,7 @@ export default function EditDepartment() {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setName(response.data.department_name);
+            setProgramType(response.data.program_type || 'engineering');
             setStatus(response.data.status);
         } catch (error) {
             setError('Failed to load department');
@@ -37,7 +39,7 @@ export default function EditDepartment() {
             const token = localStorage.getItem('token');
             await axios.put(
                 `/api/departments/${id}`,
-                { department_name: name, status },
+                { department_name: name, program_type: programType, status },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             navigate('/departments');
@@ -66,6 +68,19 @@ export default function EditDepartment() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
+                </div>
+                <div className="mb-5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Program Type</label>
+                    <select
+                        required
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
+                        value={programType}
+                        onChange={(e) => setProgramType(e.target.value)}
+                    >
+                        <option value="engineering">Engineering</option>
+                        <option value="arts">Arts / Science</option>
+                        <option value="pg">Post Graduate (PG)</option>
+                    </select>
                 </div>
                 <div className="mb-8">
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Status</label>

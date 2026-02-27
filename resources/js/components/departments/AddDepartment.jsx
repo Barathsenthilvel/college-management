@@ -5,6 +5,7 @@ import axios from 'axios';
 export default function AddDepartment() {
     const [name, setName] = useState('');
     const [code, setCode] = useState('');
+    const [programType, setProgramType] = useState('engineering');
     const [description, setDescription] = useState('');
     const [status, setStatus] = useState('active');
     const [error, setError] = useState('');
@@ -21,6 +22,7 @@ export default function AddDepartment() {
                 {
                     department_name: name,
                     department_code: code,
+                    program_type: programType,
                     description,
                     status,
                 },
@@ -67,6 +69,21 @@ export default function AddDepartment() {
                     />
                 </div>
 
+                {/* Program Type */}
+                <div className="mb-5">
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Program Type</label>
+                    <select
+                        required
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2.5 text-gray-900 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors bg-gray-50/50 hover:bg-white"
+                        value={programType}
+                        onChange={(e) => setProgramType(e.target.value)}
+                    >
+                        <option value="engineering">Engineering</option>
+                        <option value="arts">Arts / Science</option>
+                        <option value="pg">Post Graduate (PG)</option>
+                    </select>
+                </div>
+
                 {/* Description (optional) */}
                 <div className="mb-5">
                     <label className="block text-sm font-semibold text-gray-700 mb-1">
@@ -105,6 +122,7 @@ export default function AddDepartment() {
                         onClick={() => {
                             setName('');
                             setCode('');
+                            setProgramType('engineering');
                             setDescription('');
                             setStatus('active');
                             setError('');
